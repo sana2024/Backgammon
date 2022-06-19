@@ -21,6 +21,7 @@ public class Matchmaking : MonoBehaviour
     IUserPresence SecondPresence;
 
     [SerializeField] GameObject Loggedin;
+    string s;
 
 
     // Start is called before the first frame update
