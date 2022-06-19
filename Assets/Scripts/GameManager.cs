@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
         HideDiceValues();
     }
 
-    public async void SendMatchState(long opCode, string state)
+    private async void SendMatchState(long opCode, string state)
     {
         await isocket.SendMatchStateAsync(PassData.Match.Id, opCode, state);
     }
@@ -290,7 +290,7 @@ public class GameManager : MonoBehaviour
 
     #region Public
 
-    public void CheckRoundFinish()
+    private void CheckRoundFinish()
     {
         if (IsFinished())
         {
@@ -313,7 +313,7 @@ public class GameManager : MonoBehaviour
         return (enemyOutside.pieces.Count == 0) ? 2 : 1;
     }
 
-    public void NextTurn()
+    private void NextTurn()
     {
 
         Debug.Log(currentPlayer.id + " " + currentPlayer.UserId + " " + currentPlayer.pieceType);

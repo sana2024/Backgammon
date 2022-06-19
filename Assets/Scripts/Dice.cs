@@ -12,11 +12,11 @@ public class Dice : MonoBehaviour, IThrowable
     [Header("Prefabs")]
     [SerializeField]
     private DiceObject diceObject;
-    public Vector2 direction;
+    private Vector2 direction;
 
     [Header("Speed")]
-    public float moveSpeed = 5f;
-    public float rollSpeed = 3f;
+    private float moveSpeed = 5f;
+    private float rollSpeed = 3f;
 
     private Rigidbody2D body2D;
     private SpriteRenderer spriteRenderer;
@@ -125,7 +125,7 @@ public class Dice : MonoBehaviour, IThrowable
 
     }
 
-    public async void SendMatchState(long opCode, string state)
+    private async void SendMatchState(long opCode, string state)
     {
         await isocket.SendMatchStateAsync(PassData.Match.Id, opCode, state);
     }
