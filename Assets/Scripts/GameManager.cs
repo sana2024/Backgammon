@@ -16,25 +16,34 @@ public class GameManager : MonoBehaviour
     public GameObject gameEndScreen;
 
     
-
+    //-----------------
+    //Player properties
+    //-----------------
     public Player playerWhite;
     public Player playerBlack;
     public Player currentPlayer;
     public Player turnPlayer;
     public Player playerWonRound;
 
+
+    //-----------------
+    //UI elements
+    //-----------------
     public Button undoButton;
     public Button nextTurnButton;
     public Button rollButton;
     public Image firstDiceValueImage;
     public Image secondDiceValueImage;
 
+    //rounds
     private const int ROUND_LIMIT = 3;
     private int currentRound = 1;
 
- 
-
+    //nakama components
     ISocket isocket;
+
+    //Bourd
+    [SerializeField] GameObject Board;
 
     #region Unity API
 
@@ -45,11 +54,18 @@ public class GameManager : MonoBehaviour
 
         playerWhite = new Player { id = 0, pieceType = PieceType.White , UserId = PassData.hostPresence.UserId};
         playerBlack = new Player { id = 1, pieceType = PieceType.Black , UserId = PassData.SecondPresence.UserId };
+       
 
         gameEndScreen.transform.Find(UI_BUTTON_NEXT_ROUND).GetComponent<Button>().onClick.AddListener(OnNextRoundButtonClick);
         nextTurnButton.onClick.AddListener(OnNextTurnButtonClick);
         undoButton.onClick.AddListener(UndoPiece);
         rollButton.onClick.AddListener(RollDices);
+
+
+        if(PassData.Match.Self.UserId == playerBlack.UserId)
+        {
+            Board.transform.rotation  = Quaternion.Euler(180, 0, 0);
+        }
     }
 
     private void Start()
@@ -75,7 +91,7 @@ public class GameManager : MonoBehaviour
         HideDiceValues();
     }
 
-    private async void SendMatchState(long opCode, string state)
+    public async void SendMatchState(long opCode, string state)
     {
         await isocket.SendMatchStateAsync(PassData.Match.Id, opCode, state);
     }
@@ -117,9 +133,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-
-
-
+ 
 
     private void Update()
     {
@@ -290,7 +304,7 @@ public class GameManager : MonoBehaviour
 
     #region Public
 
-    private void CheckRoundFinish()
+    public void CheckRoundFinish()
     {
         if (IsFinished())
         {
@@ -313,7 +327,7 @@ public class GameManager : MonoBehaviour
         return (enemyOutside.pieces.Count == 0) ? 2 : 1;
     }
 
-    private void NextTurn()
+    public void NextTurn()
     {
 
         Debug.Log(currentPlayer.id + " " + currentPlayer.UserId + " " + currentPlayer.pieceType);
