@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
 
     //Bourd
     [SerializeField] GameObject Board;
+    [SerializeField] ResizeSlots resizeSlots;
 
     #region Unity API
 
@@ -65,6 +66,11 @@ public class GameManager : MonoBehaviour
         if(PassData.Match.Self.UserId == playerBlack.UserId)
         {
             Board.transform.rotation  = Quaternion.Euler(180, 0, 0);
+        }
+
+        if(PassData.Match.Self.UserId == playerBlack.UserId)
+        {
+            Board.transform.position = new Vector3(0.22f, 0, 0);
         }
     }
 

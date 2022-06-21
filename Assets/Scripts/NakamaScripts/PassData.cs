@@ -18,4 +18,12 @@ public class PassData
     public static IUserPresence SecondPresence;
 
 
+
+    //-----------
+    //user profile
+    //-----------
+
+    public static string Username;
+    public static string ImageURL;
+
 }

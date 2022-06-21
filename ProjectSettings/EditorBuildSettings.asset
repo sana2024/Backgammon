@@ -9,16 +9,16 @@ EditorBuildSettings:
     path: Assets/Scenes/MenuScene.unity
     guid: 93af5ac5559f1d24d984365a5a0ac0e2
   - enabled: 0
-    path: Assets/Test/OfflineScene.unity
-    guid: cce922ab29b375c4a8249f17476146c1
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/Test/RoomScene.unity
-    guid: 327d02086406ba843a629ba070fef0a6
-  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 1
     path: Assets/Scenes/NakamaLogin.unity
     guid: ca84e691aeca3436ba2d3e2a090a4f07
   - enabled: 1
-    path: Assets/Scenes/Matchmaking.unity
+    path: Assets/Scenes/Menu.unity
     guid: 4b7d7b18f2eb04ef68100caf0e1818c4
   - enabled: 1
     path: Assets/Scenes/GameScene.unity

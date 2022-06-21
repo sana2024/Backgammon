@@ -27,17 +27,7 @@ public class Matchmaking : MonoBehaviour
     // Start is called before the first frame update
     public async void Start()
     {
-        iclient = Nconnect.client();
-        isession = await iclient.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier);
-        isocket = iclient.NewSocket();
-        await isocket.ConnectAsync(isession, true);
-        Loggedin.SetActive(true);
-        Debug.Log(isession + " " + isocket);
-
-        PassData.isocket = isocket;
-
-        PlayerPrefs.SetString("Username", isession.Username);
-        PlayerPrefs.SetString("UserID", isession.UserId);
+ 
 
         isocket = PassData.isocket;
         var mainThread = UnityMainThreadDispatcher.Instance();
