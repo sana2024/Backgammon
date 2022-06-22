@@ -14,6 +14,8 @@ public class Piece : MonoBehaviour
     public int pieceId;
     public PieceType pieceType;
 
+ 
+
     //----------------------------
     // identifier properties
     //----------------------------
@@ -62,6 +64,10 @@ public class Piece : MonoBehaviour
     private void Awake()
     {
         circleCollider2D = GetComponent<CircleCollider2D>();
+
+     
+    
+
     }
 
     private void Start()
@@ -93,6 +99,8 @@ public class Piece : MonoBehaviour
                     }
 
                 }
+
+
 
                 break;
 
@@ -518,11 +526,14 @@ public class Piece : MonoBehaviour
         return false;
     }
 
-    private Vector2 GetMousePos()
+    private Vector3 GetMousePos()
     {
         Vector3 mousePos = Input.mousePosition;
-        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
-        return new Vector2(mousePos.x, mousePos.y);
+        mousePos.z = -Camera.main.transform.position.z;
+
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+
+       return worldPos;
     }
 
     #region Static Methods

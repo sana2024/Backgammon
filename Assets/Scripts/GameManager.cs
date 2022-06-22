@@ -65,13 +65,10 @@ public class GameManager : MonoBehaviour
 
         if(PassData.Match.Self.UserId == playerBlack.UserId)
         {
-            Board.transform.rotation  = Quaternion.Euler(180, 0, 0);
+            resizeSlots.Resize();
         }
 
-        if(PassData.Match.Self.UserId == playerBlack.UserId)
-        {
-            Board.transform.position = new Vector3(0.22f, 0, 0);
-        }
+ 
     }
 
     private void Start()
