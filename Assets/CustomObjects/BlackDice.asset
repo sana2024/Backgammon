@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: BlackDice
   m_EditorClassIdentifier: 
   valueSprites:
-  - {fileID: 21300000, guid: 73e6a0c67f3f9ac4db4842e14ac68af8, type: 3}
-  - {fileID: 21300000, guid: 44cd41be3e6c5ab4f98189aeca7fbd46, type: 3}
-  - {fileID: 21300000, guid: 6c807c6b4741f8840b4cc6f664801c29, type: 3}
-  - {fileID: 21300000, guid: f1aee04b87364fd46bf35bbd69cfed54, type: 3}
-  - {fileID: 21300000, guid: df425842ea368f0419a69e79453f6f22, type: 3}
-  - {fileID: 21300000, guid: 89e6bd8c754a76a4faa361faba0b1865, type: 3}
+  - {fileID: 21300000, guid: f4081c1d5f8a844a8828e9cc1ef84b9c, type: 3}
+  - {fileID: 21300000, guid: 2e64c5d4a733d48aabd324b47a218d15, type: 3}
+  - {fileID: 21300000, guid: a59ef43852d9c4f18be548b9faec2aae, type: 3}
+  - {fileID: 21300000, guid: 1183e2cc21f1c4e19822835e5dd91dfd, type: 3}
+  - {fileID: 21300000, guid: 4d54d9fb9bd70472a9e6e2abb3c008bb, type: 3}
+  - {fileID: 21300000, guid: 5d78dc0a62bfd40aba0daeea3e0218a0, type: 3}

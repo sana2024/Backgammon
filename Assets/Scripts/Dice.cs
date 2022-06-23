@@ -95,7 +95,8 @@ public class Dice : MonoBehaviour, IThrowable
         switch (matchState.OpCode)
         {
             case 4:
-                
+
+                /*
                 if (DiceID == int.Parse(state["Dice_Id"]))
                 {
                     var diceNum = int.Parse(state["Dice_sprite_index"]);
@@ -108,19 +109,11 @@ public class Dice : MonoBehaviour, IThrowable
 
                 }
 
-                
+                */
 
                 break;
 
 
-
-            case 2:
- 
- 
-                
-  
-
-                break;
         }
 
     }

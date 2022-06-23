@@ -19,7 +19,7 @@ public class DiceController : MonoBehaviour
 
     [Header("Vectors")]
     [SerializeField]
-    private ThrowLocation[] throwLocations;
+    private ThrowLocation throwLocations;
 
     [HideInInspector]
     public Sprite firstValueSprite;
@@ -72,20 +72,7 @@ public class DiceController : MonoBehaviour
 
         switch (matchState.OpCode)
         {
-            case 2:
-                Debug.Log("dice throwed");
-
-                        var firstDice = rollingDices.First();
-                        var secondDice = rollingDices.Last();
-
-                float x = float.Parse(state["Dice_Pos_X"]);
-                float y = float.Parse(state["Dice_Pos_Y"]);
-
-                firstDice.direction = new Vector2(x, y + Random.Range(-.25f, .25f));
-                secondDice.direction = new Vector2(x + .25f,y + Random.Range(-.25f, .25f));
-
-                break;
-
+ 
 
             case 5:
 
@@ -118,6 +105,13 @@ public class DiceController : MonoBehaviour
                 }
 
 
+
+                break;
+
+
+            case 2:
+
+                ThrowRecived();
 
                 break;
         }
@@ -185,7 +179,7 @@ public class DiceController : MonoBehaviour
         var throwLocation = GetThrowLocation();
         var direction = throwLocation.direction;
         var pos = throwLocation.transform.position;
-        var speed = Random.Range(3f, 11f);
+        var speed = 5f;
 
         Roll();
 
@@ -196,8 +190,8 @@ public class DiceController : MonoBehaviour
         var secondDice = rollingDices.Last();
 
         // set direction
-        firstDice.direction = new Vector2(direction.x, direction.y + Random.Range(-.25f, .25f));
-        secondDice.direction = new Vector2(direction.x + .25f, direction.y + Random.Range(-.25f, .25f));
+        firstDice.direction = new Vector2(direction.x, direction.y -0.15f);
+        secondDice.direction = new Vector2(direction.x + .25f, direction.y + 0.15f);
 
         // set move speed
         firstDice.moveSpeed = speed;
@@ -211,8 +205,45 @@ public class DiceController : MonoBehaviour
         animationStarted = true;
         animationFinished = false;
 
-        var state = MatchDataJson.SetDicePos(direction);
-        SendMatchState(OpCodes.dice_Pos, state);
+        var state = MatchDataJson.ThrowLocation("dice throwed");
+        SendMatchState(OpCodes.throw_Loc, state);
+    }
+
+    public void ThrowRecived()
+    {
+        if(throwLocations != null)
+        {
+            Debug.Log("dice rolled");
+
+            
+        var throwLocation = GetThrowLocation();
+        var direction = throwLocation.direction;
+        var pos = throwLocation.transform.position;
+        var speed = 5f;
+
+            
+        var firstDice = rollingDices.First();
+        var secondDice = rollingDices.Last();
+
+        // set direction
+        firstDice.direction = new Vector2(direction.x, direction.y - 0.15f);
+        secondDice.direction = new Vector2(direction.x + .25f, direction.y + 0.15f);
+
+          
+        // set move speed
+        firstDice.moveSpeed = speed;
+        secondDice.moveSpeed = speed + Random.Range(.75f, 3f);
+
+            
+        // throw from position
+        firstDice.Throw(values[0], pos);
+        secondDice.Throw(values[1], pos + Vector3.up * (direction.y > 0 ? 1 : -1));
+
+          
+
+        }
+
+
     }
 
  
@@ -246,7 +277,7 @@ public class DiceController : MonoBehaviour
 
     private ThrowLocation GetThrowLocation()
     {
-        return throwLocations[Random.Range(0, throwLocations.Length)];
+        return throwLocations;
     }
 
     private void SetRollingDices()

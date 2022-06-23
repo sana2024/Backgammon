@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
 
         if(PassData.Match.Self.UserId == playerBlack.UserId)
         {
-            resizeSlots.Resize();
+            resizeSlots.rotate();
         }
 
  

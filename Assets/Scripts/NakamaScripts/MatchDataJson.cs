@@ -17,12 +17,12 @@ public class MatchDataJson
         return values.ToJson();
     }
 
-    public static string SetDicePos(Vector2 Pos)
+    public static string ThrowLocation(string result)
     {
         var values = new Dictionary<string, string>
         {
-            { "Dice_Pos_X", Pos.x.ToString()},
-            { "Dice_Pos_Y", Pos.y.ToString()}
+            { "Result", result}
+ 
         };
 
         return values.ToJson();

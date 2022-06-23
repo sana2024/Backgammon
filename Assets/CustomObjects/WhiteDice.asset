@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: WhiteDice
   m_EditorClassIdentifier: 
   valueSprites:
-  - {fileID: 21300000, guid: 3d9108a5dc46bd34daa1f49b22e0352d, type: 3}
-  - {fileID: 21300000, guid: c621e0aaf251abc45b3a2ffd9bcab19f, type: 3}
-  - {fileID: 21300000, guid: 2e08cd65bb9b62443967122fc4745508, type: 3}
-  - {fileID: 21300000, guid: 71446b76847ce0344a1259a8efff8451, type: 3}
-  - {fileID: 21300000, guid: a0eb0f68f1ba03b469dfa31409363ee1, type: 3}
-  - {fileID: 21300000, guid: 67a3021b21a98a24db599d8a9575454d, type: 3}
+  - {fileID: 21300000, guid: 2de84be07d3b8416abff3c7823b018ba, type: 3}
+  - {fileID: 21300000, guid: 8e12d59256af94def990ccbeccd65fdb, type: 3}
+  - {fileID: 21300000, guid: d1ccfb63ce03441b0bdb868be2c1b5eb, type: 3}
+  - {fileID: 21300000, guid: 3f2e1876b708d4f5d8f69b499b905faa, type: 3}
+  - {fileID: 21300000, guid: fc6dc2e5337c74cd8a13a8ab080de347, type: 3}
+  - {fileID: 21300000, guid: 1b71d78a40a3d49aeba592a092def028, type: 3}
