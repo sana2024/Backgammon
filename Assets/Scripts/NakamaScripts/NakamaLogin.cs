@@ -76,8 +76,8 @@ public class NakamaLogin : MonoBehaviour
         PassData.isocket = isocket;
         PassData.Username = username;
         PassData.ImageURL = avatarUrl;
-             
 
+ 
 
         ChangeScene();
     }

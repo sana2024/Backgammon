@@ -17,11 +17,12 @@ public class MatchDataJson
         return values.ToJson();
     }
 
-    public static string ThrowLocation(string result)
+    public static string SetDicePos(Vector2 pos)
     {
         var values = new Dictionary<string, string>
         {
-            { "Result", result}
+            { "Pos_X", pos.x.ToString()},
+            { "Pos_Y", pos.y.ToString()}
  
         };
 
@@ -59,6 +60,23 @@ public class MatchDataJson
 
         return values.ToJson();
     }
+
+    public static string SetUndo(string peiceID,  string from, string to , string steps, string actionType)
+    {
+        var values = new Dictionary<string, string>
+        {
+            {"PeiceID" , peiceID },
+            {"From" , from },
+            {"To" , to },
+            {"Steps" , steps },
+            {"ActionType" , actionType },
+
+        };
+
+        return values.ToJson();
+    }
+
+
 
 
 

@@ -51,7 +51,14 @@ public class Piece : MonoBehaviour
     public Slot currentSlot = null;
     private Slot collisionSlot = null;
 
+    private Slot UndoSlot;
+
     private CircleCollider2D circleCollider2D;
+
+    GameObject SlotPos;
+    Slot undoSlot;
+
+
 
     //----------------------------
     // Nakama Elements
@@ -105,6 +112,12 @@ public class Piece : MonoBehaviour
 
                 break;
 
+
+            case 7:
+
+ 
+
+                break;
         }
 
 

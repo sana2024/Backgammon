@@ -20,8 +20,9 @@ public class Matchmaking : MonoBehaviour
     IUserPresence hostPresence;
     IUserPresence SecondPresence;
 
-    [SerializeField] GameObject Loggedin;
-    string s;
+ 
+
+    [SerializeField] GameObject SearchingPanel;
 
 
     // Start is called before the first frame update
@@ -39,6 +40,7 @@ public class Matchmaking : MonoBehaviour
     public async void FindMatch()
     {
         Debug.Log("Finding match");
+        SearchingPanel.SetActive(true);
 
         var matchmakingTickets = await isocket.AddMatchmakerAsync("*", 2, 2);
 

@@ -131,6 +131,43 @@ public class GameManager : MonoBehaviour
 
                 break;
 
+            case 7:
+
+                GameObject pieceOb = GameObject.Find(state["PeiceID"]);
+                Piece piece = pieceOb.GetComponent<Piece>();
+
+                GameObject from = GameObject.Find(state["From"]);
+                Slot FromSlot = from.GetComponent<Slot>();
+
+                FromSlot.pieces.Remove(piece);
+
+                GameObject to = GameObject.Find(state["To"]);
+                Slot ToSlot = to.GetComponent<Slot>();
+
+                int steps = int.Parse(state["Steps"]);
+
+                MoveActionTypes ActionType = (MoveActionTypes)Enum.Parse(typeof(MoveActionTypes), state["ActionType"]);
+
+               currentPlayer.movesPlayed.Add(new Move
+                {
+                    piece = piece,
+                    from = FromSlot,
+                    to = ToSlot,
+                    step = steps,
+                    action = ActionType,
+                });
+
+
+                var lastMove = currentPlayer.movesPlayed.Last();
+                lastMove.piece.PlaceOn(lastMove.from);
+                
+                currentPlayer.movesPlayed.Remove(lastMove);
+
+
+
+
+                break;
+
         }
 
 
@@ -423,6 +460,10 @@ public class GameManager : MonoBehaviour
 
         // undo move action
         lastMove.piece.PlaceOn(lastMove.from);
+
+        Debug.Log(lastMove.from.ToString());
+        var state = MatchDataJson.SetUndo(lastMove.piece.name, lastMove.from.name, lastMove.to.name, lastMove.step.ToString() , lastMove.action.ToString());
+        SendMatchState(OpCodes.undo ,state);
 
         // undo hit action
         if ((lastMove.action & MoveActionTypes.Hit) == MoveActionTypes.Hit)
