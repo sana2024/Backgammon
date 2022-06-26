@@ -2,13 +2,13 @@
 
 public class OpCodes 
 {
-    public const int Peice_Pos = 1;
-    public const int throw_Loc = 2;
-    public const int dice_Rot = 3;
-    public const int dice_Sprite = 4;
-    public const int Show_dice = 5;
-    public const int current_player = 6;
-    public const int undo = 7;
+    public static int Peice_Pos = 1;
+    public static int throw_Loc = 2;
+    public static int dice_Rot = 3;
+    public static int dice_Sprite = 4;
+    public static int Show_dice = 5;
+    public static int current_player = 6;
+    public static int undo = 7;
  
     
 }
