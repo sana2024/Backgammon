@@ -18,7 +18,6 @@ public class MatchDataJson
     }
 
  
-
     public static string SetDicePos(Vector2 pos)
     {
         var values = new Dictionary<string, string>
@@ -63,7 +62,8 @@ public class MatchDataJson
         return values.ToJson();
     }
 
-    public static string SetUndo(string peiceID,  string from, string to , string steps, string actionType)
+    //for adding and removes from the stack for Undo and hit actions
+    public static string SetPieceStack(string peiceID,  string from, string to , string steps, string actionType)
     {
         var values = new Dictionary<string, string>
         {

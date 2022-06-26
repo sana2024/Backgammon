@@ -462,7 +462,7 @@ public class GameManager : MonoBehaviour
         lastMove.piece.PlaceOn(lastMove.from);
 
         Debug.Log(lastMove.from.ToString());
-        var state = MatchDataJson.SetUndo(lastMove.piece.name, lastMove.from.name, lastMove.to.name, lastMove.step.ToString() , lastMove.action.ToString());
+        var state = MatchDataJson.SetPieceStack(lastMove.piece.name, lastMove.from.name, lastMove.to.name, lastMove.step.ToString() , lastMove.action.ToString());
         SendMatchState(OpCodes.undo ,state);
 
         // undo hit action
