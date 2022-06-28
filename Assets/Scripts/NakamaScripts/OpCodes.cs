@@ -9,6 +9,7 @@ public class OpCodes
     public const int Show_dice = 5;
     public const int current_player = 6;
     public const int undo = 7;
+    public const int stack = 8;
  
     
 }

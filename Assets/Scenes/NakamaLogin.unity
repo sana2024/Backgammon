@@ -326,7 +326,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ae478f31d4368429ab787d27b74425e3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7556ddf0bc44ffe4382925c3109f1cdc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -655,7 +655,7 @@ MonoBehaviour:
   PlatformBtn: {fileID: 446445867}
   GoogleIcon: {fileID: 21300000, guid: 7556ddf0bc44ffe4382925c3109f1cdc, type: 3}
   GameCenterIcon: {fileID: 21300000, guid: 04fc101e917a9d1488fb8487d484b2b4, type: 3}
-  EditorIcon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  EditorIcon: {fileID: 21300000, guid: 7556ddf0bc44ffe4382925c3109f1cdc, type: 3}
 --- !u!4 &1126606894
 Transform:
   m_ObjectHideFlags: 0
@@ -664,7 +664,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1126606892}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 544.57935, y: 386.2668, z: -9.832009}
+  m_LocalPosition: {x: 544.57935, y: 393, z: -9.832009}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -731,7 +731,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 862d03c5945bae84f8c548b21a4dc5e9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 62be7b1315c7b4e5db8657c94dded578, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

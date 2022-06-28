@@ -4,6 +4,7 @@ using UnityEngine;
 using Nakama;
 using Nakama.TinyJson;
 using System.Threading.Tasks;
+using System;
 
 [RequireComponent(typeof(Collider2D))]
 public class Piece : MonoBehaviour
@@ -14,7 +15,13 @@ public class Piece : MonoBehaviour
     public int pieceId;
     public PieceType pieceType;
 
- 
+
+    //----------------------------
+    //  Class Instance
+    //----------------------------
+
+    public static Piece instance;
+
 
     //----------------------------
     // identifier properties
@@ -60,6 +67,7 @@ public class Piece : MonoBehaviour
 
 
 
+
     //----------------------------
     // Nakama Elements
     //----------------------------
@@ -70,6 +78,11 @@ public class Piece : MonoBehaviour
 
     private void Awake()
     {
+
+        if(instance == null)
+        {
+            instance = this;        }
+
         circleCollider2D = GetComponent<CircleCollider2D>();
 
      
@@ -101,22 +114,51 @@ public class Piece : MonoBehaviour
                 {
                     if (this != null)
                     {
-                      transform.position = new Vector2(float.Parse(state["Pos_x"])-0.12f, -float.Parse(state["pos_y"])+ 0.45f);
+                        transform.position = new Vector2(float.Parse(state["Pos_x"]), -float.Parse(state["pos_y"]));
 
                       
                     }
 
                 }
 
-
-
                 break;
 
 
-            case 7:
+            case 8:
 
+
+
+                GameObject pieceOb = GameObject.Find(state["PeiceID"]);
+                Piece piece = pieceOb.GetComponent<Piece>();
+
+                GameObject from = GameObject.Find(state["From"]);
+                Slot FromSlot = from.GetComponent<Slot>();
+
+                FromSlot.pieces.Remove(piece);
+
+                GameObject to = GameObject.Find(state["To"]);
+                Slot ToSlot = to.GetComponent<Slot>();
+
+                int steps = int.Parse(state["Steps"]);
+
+                MoveActionTypes ActionType = (MoveActionTypes)Enum.Parse(typeof(MoveActionTypes), state["ActionType"]);
+
+                ToSlot.pieces.Add(piece);
+                piece.PlaceOn(ToSlot);
+
+                var movesPlayedList = GameManager.instance.currentPlayer.movesPlayed;
+                movesPlayedList.Add(new Move { piece = this, from = currentSlot, to = ToSlot, step = steps, action = ActionType });
+
+                if (pieceId == piece.pieceId)
+                {
+                    if (this != null)
+                    {
+                        Debug.Log(ActionType);
+                        OnReciveMove(piece ,movesPlayedList.Last().to, movesPlayedList.Last().action, movesPlayedList.Last().step);
+                    }
+
+                }
  
-
                 break;
         }
 
@@ -191,9 +233,9 @@ public class Piece : MonoBehaviour
         circleCollider2D.radius = .1f;
     }
 
-    private void IncreaseColliderRadius()
+    public void IncreaseColliderRadius()
     {
-        circleCollider2D.radius = 1.9f;
+        circleCollider2D.radius = 2.24898f;
     }
 
     private float GetOffsetMultiplier(SlotType type)
@@ -492,10 +534,10 @@ public class Piece : MonoBehaviour
     {
         var movesPlayedList = GameManager.instance.currentPlayer.movesPlayed;
 
-        Debug.LogWarning(action);
-
         // log played moves for undo
         movesPlayedList.Add(new Move { piece = this, from = currentSlot, to = to, step = stepPlayed, action = action });
+        var state = MatchDataJson.SetPieceStack(this.name, currentSlot.name , to.name , stepPlayed.ToString(), action.ToString());
+        SendMatchState(OpCodes.stack, state);
 
         //---------------------------------------
         // action events
@@ -512,9 +554,16 @@ public class Piece : MonoBehaviour
         // move yourself to outside
         if ((action & MoveActionTypes.Bear) == MoveActionTypes.Bear)
         {
-            var slotOutside = Slot.GetOutside(pieceType);
 
-            PlaceOn(slotOutside.GetComponent<Slot>());
+           // DecreaseColliderRadius();
+
+            ConvertPieceOutside.instance.FromSlotToOut(this);
+
+            var slotOutside = Slot.GetOutside(pieceType).GetComponent<Slot>();
+
+            movesPlayedList.Add(new Move { piece = this, from = currentSlot, to = slotOutside, step = stepPlayed, action = action });
+
+            PlaceOn(slotOutside);
 
             // check round finish
             GameManager.instance.CheckRoundFinish();
@@ -522,6 +571,51 @@ public class Piece : MonoBehaviour
         // place on new slot
         else
             PlaceOn(to);
+    }
+
+    private void OnReciveMove(Piece piece, Slot to, MoveActionTypes action, int stepPlayed)
+    {
+        var movesPlayedList = GameManager.instance.currentPlayer.movesPlayed;
+
+        var lastMove = movesPlayedList.Last();
+
+
+        // log played moves for undo
+        movesPlayedList.Add(new Move { piece = piece, from = currentSlot, to = to, step = stepPlayed, action = action });
+
+
+        //moves enemy to bar
+        if ((action & MoveActionTypes.Hit) == MoveActionTypes.Hit)
+        {
+            var enemyPiece = to.GetComponent<Slot>().pieces.First();
+            var enemyBar = Slot.GetBar(Piece.GetEnemyType(pieceType));
+
+            enemyPiece.PlaceOn(enemyBar.GetComponent<Slot>());
+
+            Debug.Log(enemyPiece);
+            Debug.Log(enemyBar);
+
+            lastMove.piece.PlaceOn(enemyBar.GetComponent<Slot>());
+        }
+
+        // move yourself to outside
+        if ((action & MoveActionTypes.Bear) == MoveActionTypes.Bear)
+        {
+          //  DecreaseColliderRadius();
+            ConvertPieceOutside.instance.FromSlotToOut(this);
+
+            var slotOutside = Slot.GetOutside(pieceType);
+
+            PlaceOn(slotOutside);
+
+            // check round finish
+            GameManager.instance.CheckRoundFinish();
+        }
+        // place on new slot
+        else
+
+         lastMove.piece.PlaceOn(lastMove.to);
+
     }
 
     private bool IsMouseOverThis()

@@ -80,15 +80,7 @@ public class GameManager : MonoBehaviour
         isocket.ReceivedMatchState += m => mainThread.Enqueue(async () => await OnReceivedMatchState(m));
 
         HideGameEndScreen();
-
-        /*
-        if (PlayerPrefs.GetString(Constants.PREF_CURRENT_PLAYER) == Constants.PREF_CURRENT_PLAYER1)
-            currentPlayer = playerWhite;
-            
-        else
-            currentPlayer = playerBlack;
-        */
-
+ 
         currentPlayer = playerWhite;
         turnPlayer = currentPlayer;
         HideDiceValues();
@@ -132,7 +124,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case 7:
-
+                
                 GameObject pieceOb = GameObject.Find(state["PeiceID"]);
                 Piece piece = pieceOb.GetComponent<Piece>();
 
@@ -159,11 +151,26 @@ public class GameManager : MonoBehaviour
 
 
                 var lastMove = currentPlayer.movesPlayed.Last();
+
+                if ((lastMove.action & MoveActionTypes.Hit) == MoveActionTypes.Bear)
+                {
+                   // ConvertPieceOutside.instance.FromOutToSlot(lastMove.piece);
+                   // piece.IncreaseColliderRadius();
+                }
+
                 lastMove.piece.PlaceOn(lastMove.from);
-                
+
+                // undo hit action
+                if ((lastMove.action & MoveActionTypes.Hit) == MoveActionTypes.Hit)
+                {
+                    var enemyBar = Slot.GetBar(Piece.GetEnemyType(lastMove.piece.pieceType));
+                    var enemyPiece = enemyBar.pieces.Last();
+                    enemyPiece.PlaceOn(lastMove.to);
+                }
+
                 currentPlayer.movesPlayed.Remove(lastMove);
 
-
+                
 
 
                 break;
@@ -472,6 +479,14 @@ public class GameManager : MonoBehaviour
             var enemyPiece = enemyBar.pieces.Last();
             enemyPiece.PlaceOn(lastMove.to);
         }
+
+        // bear action
+        if((lastMove.action & MoveActionTypes.Hit)== MoveActionTypes.Bear)
+        {
+           ConvertPieceOutside.instance.FromOutToSlot(lastMove.piece);
+           // lastMove.piece.IncreaseColliderRadius();
+        }
+
 
         currentPlayer.movesPlayed.Remove(lastMove);
     }
