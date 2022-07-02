@@ -555,13 +555,17 @@ public class Piece : MonoBehaviour
         if ((action & MoveActionTypes.Bear) == MoveActionTypes.Bear)
         {
 
-           // DecreaseColliderRadius();
+ 
 
             ConvertPieceOutside.instance.FromSlotToOut(this);
 
             var slotOutside = Slot.GetOutside(pieceType).GetComponent<Slot>();
 
-            movesPlayedList.Add(new Move { piece = this, from = currentSlot, to = slotOutside, step = stepPlayed, action = action });
+            for(int i=0; i < slotOutside.pieces.Count; i++)
+            {
+              //  slotOutside.pieces[i].transform.position =new Vector3(slotOutside.pieces[i].transform.position.x, slotOutside.pieces[i].transform.position.y+i, slotOutside.pieces[i].transform.position.z);
+            }
+     
 
             PlaceOn(slotOutside);
 
@@ -578,11 +582,7 @@ public class Piece : MonoBehaviour
         var movesPlayedList = GameManager.instance.currentPlayer.movesPlayed;
 
         var lastMove = movesPlayedList.Last();
-
-
-        // log played moves for undo
-        movesPlayedList.Add(new Move { piece = piece, from = currentSlot, to = to, step = stepPlayed, action = action });
-
+ 
 
         //moves enemy to bar
         if ((action & MoveActionTypes.Hit) == MoveActionTypes.Hit)

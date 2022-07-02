@@ -152,11 +152,10 @@ public class GameManager : MonoBehaviour
 
                 var lastMove = currentPlayer.movesPlayed.Last();
 
-                if ((lastMove.action & MoveActionTypes.Hit) == MoveActionTypes.Bear)
-                {
-                   // ConvertPieceOutside.instance.FromOutToSlot(lastMove.piece);
-                   // piece.IncreaseColliderRadius();
-                }
+                
+                    ConvertPieceOutside.instance.FromOutToSlot(lastMove.piece);
+                     piece.IncreaseColliderRadius();
+                
 
                 lastMove.piece.PlaceOn(lastMove.from);
 
@@ -481,11 +480,10 @@ public class GameManager : MonoBehaviour
         }
 
         // bear action
-        if((lastMove.action & MoveActionTypes.Hit)== MoveActionTypes.Bear)
-        {
+       
            ConvertPieceOutside.instance.FromOutToSlot(lastMove.piece);
-           // lastMove.piece.IncreaseColliderRadius();
-        }
+            lastMove.piece.IncreaseColliderRadius();
+        
 
 
         currentPlayer.movesPlayed.Remove(lastMove);

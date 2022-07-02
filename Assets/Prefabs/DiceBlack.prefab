@@ -46,18 +46,18 @@ PrefabInstance:
     - target: {fileID: 6342617540335511433, guid: e4db3657e8b201746a9b7f322040ca6d,
         type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 8.4
+      value: 12.57
       objectReference: {fileID: 0}
     - target: {fileID: 6342617540335511433, guid: e4db3657e8b201746a9b7f322040ca6d,
         type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 8.87
+      value: 13.41
       objectReference: {fileID: 0}
     - target: {fileID: 6342617540335511435, guid: e4db3657e8b201746a9b7f322040ca6d,
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: d1162e2b20c8e418a833bba0703dc8dd,
+      objectReference: {fileID: 21300000, guid: 6877548b4dfe04a9da3aa3924ee65bc2,
         type: 3}
     - target: {fileID: 6342617540335511436, guid: e4db3657e8b201746a9b7f322040ca6d,
         type: 3}
@@ -67,17 +67,17 @@ PrefabInstance:
     - target: {fileID: 6342617540335511436, guid: e4db3657e8b201746a9b7f322040ca6d,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.2
+      value: 0.13824
       objectReference: {fileID: 0}
     - target: {fileID: 6342617540335511436, guid: e4db3657e8b201746a9b7f322040ca6d,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.2
+      value: 0.13824
       objectReference: {fileID: 0}
     - target: {fileID: 6342617540335511436, guid: e4db3657e8b201746a9b7f322040ca6d,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.2
+      value: 0.13824
       objectReference: {fileID: 0}
     - target: {fileID: 6342617540335511436, guid: e4db3657e8b201746a9b7f322040ca6d,
         type: 3}
