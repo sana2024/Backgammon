@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Nakama;
+using UnityEngine.Networking;
 
 [CreateAssetMenu]
 public class NakamaConnection : ScriptableObject
