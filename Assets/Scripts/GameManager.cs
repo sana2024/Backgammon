@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     public Button rollButton;
     public Image firstDiceValueImage;
     public Image secondDiceValueImage;
+    [SerializeField] ButtonController buttonController; 
 
     //rounds
     private const int ROUND_LIMIT = 3;
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviour
     //Bourd
     [SerializeField] GameObject Board;
     [SerializeField] ResizeSlots resizeSlots;
+   
 
     #region Unity API
 
@@ -187,6 +189,13 @@ public class GameManager : MonoBehaviour
         {
             ShowDiceValues();
         }
+
+
+        if (currentPlayer.UserId == PassData.Match.Self.UserId)
+        {
+            buttonController.EnableRollButton();
+            
+        }
     }
 
     #endregion
@@ -303,6 +312,9 @@ public class GameManager : MonoBehaviour
             DiceController.instance.ThrowDices();
             currentPlayer.rolledDice = true;
             StartCoroutine(AfterRolledDice());
+
+                buttonController.EnableDoneButton();
+                buttonController.EnableUndoButton();
         }
         else
         {

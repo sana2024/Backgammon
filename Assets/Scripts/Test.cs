@@ -10,6 +10,7 @@ public class Test : MonoBehaviour
     int j;
     float i;
 
+    [SerializeField] GameObject btn;
  
 
    public List<Piece> Circles = new List<Piece>();
@@ -19,7 +20,7 @@ public class Test : MonoBehaviour
     // Start is called before the first frame update
    public void onclick()
     {
-        Vector2 v = new Vector2(0, 1);
+        Vector2 v = new Vector2(0, -3);
         Piece ob = Instantiate(piece, v, Quaternion.identity);
         j++;
         c.name = "checker "+j;
@@ -34,9 +35,14 @@ public class Test : MonoBehaviour
  
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnRemove()
     {
-        
+        Circles.Remove(Circles.LastOrDefault());
+
     }
-}
+
+    public void dissable()
+    {
+        btn.SetActive(false);
+    }
+    }
