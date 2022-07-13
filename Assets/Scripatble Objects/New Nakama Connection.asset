@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a74e6b817387443c89320c68078a60d, type: 3}
   m_Name: New Nakama Connection
   m_EditorClassIdentifier: 
-  scheme: https
-  host: asiahawala123.as-neast3-a.nakamacloud.io
-  port: 443
-  serverKey: BIFNYR3KCAXA
+  scheme: http
+  host: 127.0.0.1
+  port: 7350
+  serverKey: defaultkey

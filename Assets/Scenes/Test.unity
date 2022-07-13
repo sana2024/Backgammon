@@ -481,6 +481,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   c: {fileID: 7091280454122891530, guid: ecaa1690077f4427db9e9aee12e73891, type: 3}
+  Circles: []
+  piece: {fileID: 3576438763098073047, guid: 8eac452f361429145b7544d511b25cbf, type: 3}
 --- !u!4 &741510137
 Transform:
   m_ObjectHideFlags: 0

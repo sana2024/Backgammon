@@ -479,11 +479,12 @@ public class GameManager : MonoBehaviour
             enemyPiece.PlaceOn(lastMove.to);
         }
 
-        // bear action
+        //undo bear action
        
            ConvertPieceOutside.instance.FromOutToSlot(lastMove.piece);
             lastMove.piece.IncreaseColliderRadius();
-        
+
+ 
 
 
         currentPlayer.movesPlayed.Remove(lastMove);

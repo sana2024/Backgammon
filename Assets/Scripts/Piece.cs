@@ -65,6 +65,8 @@ public class Piece : MonoBehaviour
     GameObject SlotPos;
     Slot undoSlot;
 
+    float index;
+
 
 
 
@@ -561,11 +563,14 @@ public class Piece : MonoBehaviour
 
             var slotOutside = Slot.GetOutside(pieceType).GetComponent<Slot>();
 
-            for(int i=0; i < slotOutside.pieces.Count; i++)
+            if (slotOutside.pieces.LastOrDefault() != null)
             {
-              //  slotOutside.pieces[i].transform.position =new Vector3(slotOutside.pieces[i].transform.position.x, slotOutside.pieces[i].transform.position.y+i, slotOutside.pieces[i].transform.position.z);
+
+                index += 0.15f;
+                slotOutside.pieces.LastOrDefault().transform.position = new Vector2(slotOutside.pieces.LastOrDefault().transform.position.x, slotOutside.pieces.LastOrDefault().transform.position.y + index);
+ 
+
             }
-     
 
             PlaceOn(slotOutside);
 
@@ -605,6 +610,9 @@ public class Piece : MonoBehaviour
             ConvertPieceOutside.instance.FromSlotToOut(this);
 
             var slotOutside = Slot.GetOutside(pieceType);
+
+            index += 0.15f;
+            slotOutside.pieces.Last().transform.position = new Vector2(slotOutside.pieces.Last().transform.position.x, slotOutside.pieces.Last().transform.position.y + index);
 
             PlaceOn(slotOutside);
 

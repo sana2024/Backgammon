@@ -1,34 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Test : MonoBehaviour
 {
 
     [SerializeField] GameObject c;
- 
+    int j;
+    float i;
 
  
 
-    List<GameObject> Circles = new List<GameObject>();
+   public List<Piece> Circles = new List<Piece>();
 
-    
+    [SerializeField] Piece piece; 
 
     // Start is called before the first frame update
    public void onclick()
     {
-        Vector2 v = new Vector2(0, -2);
-        GameObject ob = Instantiate(c, v, Quaternion.identity);
-
+        Vector2 v = new Vector2(0, 1);
+        Piece ob = Instantiate(piece, v, Quaternion.identity);
+        j++;
+        c.name = "checker "+j;
         Circles.Add(ob);
  
 
+         i += 0.7f;
 
-        for(int i = 0; i<Circles.Count; i++)
-        {
-            Circles[i].transform.position = new Vector2(0,-2+i);
+        Debug.Log(i);
 
-        }
+       Circles.LastOrDefault().transform.position = new Vector2(Circles.LastOrDefault().transform.position.x, Circles.LastOrDefault().transform.position.y + i);
+ 
     }
 
     // Update is called once per frame
