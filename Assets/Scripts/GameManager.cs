@@ -86,6 +86,12 @@ public class GameManager : MonoBehaviour
         currentPlayer = playerWhite;
         turnPlayer = currentPlayer;
         HideDiceValues();
+
+        if (currentPlayer.UserId == PassData.Match.Self.UserId)
+        {
+            buttonController.EnableRollButton();
+
+        }
     }
 
     public async void SendMatchState(long opCode, string state)
@@ -101,6 +107,11 @@ public class GameManager : MonoBehaviour
         switch (matchState.OpCode)
         {
             case 6:
+
+ 
+                 buttonController.EnableRollButton();
+
+               
 
                 Debug.Log(state["Current_Player"]);
 
@@ -191,11 +202,7 @@ public class GameManager : MonoBehaviour
         }
 
 
-        if (currentPlayer.UserId == PassData.Match.Self.UserId)
-        {
-            buttonController.EnableRollButton();
-            
-        }
+ 
     }
 
     #endregion

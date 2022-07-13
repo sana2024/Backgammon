@@ -7,13 +7,13 @@ using UnityEngine.UI;
 public class UserProfile : MonoBehaviour
 {
     [SerializeField] RawImage ProfileImage;
-    [SerializeField] Text Username;
+ 
 
     // Start is called before the first frame update
     void Start()
     {
 
-        Username.text = PassData.Username;
+ 
         StartCoroutine(GetTexture());
         
     }
