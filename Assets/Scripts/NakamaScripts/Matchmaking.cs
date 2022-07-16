@@ -23,6 +23,7 @@ public class Matchmaking : MonoBehaviour
  
 
     [SerializeField] GameObject SearchingPanel;
+    [SerializeField] JoinChannel joinChannel;
 
 
     // Start is called before the first frame update
@@ -61,13 +62,14 @@ public class Matchmaking : MonoBehaviour
         Debug.Log("Our Match ID: " + match.Self.SessionId);
         currentMatch = match;
         PassData.Match = currentMatch;
+        PlayerPrefs.SetString("matchID",currentMatch.Id);
 
         PlayerPrefs.SetString("MatchSelf", currentMatch.Self.UserId);
         foreach (var presence in match.Presences)
         {
             Debug.Log("we Joined A match");
 
-
+            joinChannel.onJoin(match.Id);
 
             SceneManager.LoadScene("GameScene");
 
@@ -86,7 +88,7 @@ public class Matchmaking : MonoBehaviour
     {
         foreach (var user in matchPresenceEvent.Joins)
         {
-
+            joinChannel.onJoin(PlayerPrefs.GetString("matchID"));
             SceneManager.LoadScene("GameScene");
  
             var UserId = PlayerPrefs.GetString("MatchSelf");

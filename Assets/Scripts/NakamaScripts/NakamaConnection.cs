@@ -13,13 +13,14 @@ public class NakamaConnection : ScriptableObject
     public string serverKey;
 
     public IClient iclient;
-
-
-
+ 
+ 
     public IClient client()
     {
         iclient = new Client(scheme, host, port, serverKey, UnityWebRequestAdapter.Instance);
         return iclient;
     }
+
+    
 
 }

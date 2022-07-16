@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
         playerBlack = new Player { id = 1, pieceType = PieceType.Black , UserId = PassData.SecondPresence.UserId };
        
 
-        gameEndScreen.transform.Find(UI_BUTTON_NEXT_ROUND).GetComponent<Button>().onClick.AddListener(OnNextRoundButtonClick);
+//        gameEndScreen.transform.Find(UI_BUTTON_NEXT_ROUND).GetComponent<Button>().onClick.AddListener(OnNextRoundButtonClick);
         nextTurnButton.onClick.AddListener(OnNextTurnButtonClick);
         undoButton.onClick.AddListener(UndoPiece);
         rollButton.onClick.AddListener(RollDices);

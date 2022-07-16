@@ -12,9 +12,9 @@ public class NakamaLogin : MonoBehaviour
     //--------------
 
     [SerializeField] NakamaConnection Nconnect;
-    private IClient iclient;
-    private ISession isession;
-    private ISocket isocket;
+    public IClient iclient;
+    public ISession isession;
+    public ISocket isocket;
 
 
     //-------------
@@ -66,6 +66,7 @@ public class NakamaLogin : MonoBehaviour
         await isocket.ConnectAsync(isession, true);
         Debug.Log(isession + " " + isocket);
 
+ 
 
 
         string displayName = "Player " + Random.RandomRange(0, 5000);
@@ -76,6 +77,8 @@ public class NakamaLogin : MonoBehaviour
         PassData.isocket = isocket;
         PassData.Username = username;
         PassData.ImageURL = avatarUrl;
+        PassData.iClient = iclient;
+        PassData.isession = isession;
 
  
 
@@ -113,6 +116,8 @@ public class NakamaLogin : MonoBehaviour
         await iclient.UpdateAccountAsync(isession, null, null, avatarUrl, null, null);
 
         PassData.isocket = isocket;
+        PassData.iClient = iclient;
+        PassData.isession = isession;
 
         ChangeScene();
     }
