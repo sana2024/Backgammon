@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
     //Bourd
     [SerializeField] GameObject Board;
     [SerializeField] ResizeSlots resizeSlots;
+    [SerializeField] GameObject CameraBackground;
    
 
     #region Unity API
@@ -76,6 +77,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
 
         isocket = PassData.isocket;
         var mainThread = UnityMainThreadDispatcher.Instance();
@@ -184,6 +186,23 @@ public class GameManager : MonoBehaviour
 
                 
 
+
+                break;
+
+
+            case 9:
+
+                if (state["Camera_Background"] == "True"){
+
+                    CameraBackground.SetActive(true);
+                }
+
+
+                if (state["Camera_Background"] == "False")
+                {
+
+                    CameraBackground.SetActive(false);
+                }
 
                 break;
 

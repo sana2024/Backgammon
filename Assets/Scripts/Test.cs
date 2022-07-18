@@ -10,15 +10,28 @@ public class Test : MonoBehaviour
     int j;
     float i;
 
-    [SerializeField] GameObject btn;
+    
+
+ 
+    [SerializeField] GameObject img;
+
+    public bool controller=false;
  
 
    public List<Piece> Circles = new List<Piece>();
 
-    [SerializeField] Piece piece; 
+    [SerializeField] Piece piece;
+
+
+    public void Start()
+    {
+        bool s = true;
+
+        Debug.Log(s.ToString());
+    }
 
     // Start is called before the first frame update
-   public void onclick()
+    public void onclick()
     {
         Vector2 v = new Vector2(0, -3);
         Piece ob = Instantiate(piece, v, Quaternion.identity);
@@ -43,6 +56,7 @@ public class Test : MonoBehaviour
 
     public void dissable()
     {
-        btn.SetActive(false);
+        controller = !controller;
+        img.SetActive(controller);
     }
     }

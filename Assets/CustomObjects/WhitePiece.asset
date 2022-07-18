@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24bf8d713163cba4d9ca57dcd3a06bc0, type: 3}
   m_Name: WhitePiece
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: d1661a8114d4e419d9a72b145d8500eb, type: 3}
+  sprite: {fileID: 21300000, guid: 0bb607e9d71b74909878c9122a6f2351, type: 3}
   pieceType: 0

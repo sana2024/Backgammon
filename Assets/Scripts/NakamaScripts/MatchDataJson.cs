@@ -79,10 +79,16 @@ public class MatchDataJson
     }
 
 
+    public static string SetCameraBackground(bool SetBackground)
+    {
+        var values = new Dictionary<string, string>
+        {
+            { "Camera_Background" , SetBackground.ToString()}
 
+        };
 
-
-
+        return values.ToJson();
+    }
 
 
 
