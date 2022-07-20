@@ -190,6 +190,9 @@ public class GameManager : MonoBehaviour
                 break;
 
 
+             
+
+
             case 9:
 
                 if (state["Camera_Background"] == "True"){
@@ -203,6 +206,14 @@ public class GameManager : MonoBehaviour
 
                     CameraBackground.SetActive(false);
                 }
+
+                break;
+
+
+            case 10:
+
+              int time=  int.Parse(state["Timer"]);
+                Debug.Log(time);
 
                 break;
 
@@ -425,7 +436,8 @@ public class GameManager : MonoBehaviour
 
         // reset dice
         ResetDice();
-
+        var timer = MatchDataJson.SetTimer(60);
+        SendMatchState(OpCodes.Player_Timer, timer);
         //--------------------------------
         // turn the set to the next player
         //--------------------------------
@@ -438,6 +450,8 @@ public class GameManager : MonoBehaviour
 
             var state = MatchDataJson.SetCurrentPlayer("Black");
               SendMatchState(OpCodes.current_player, state);
+
+           
 
             return;
         }

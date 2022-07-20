@@ -91,5 +91,17 @@ public class MatchDataJson
     }
 
 
+    public static string SetTimer(int SetTime)
+    {
+        var values = new Dictionary<string, string>
+        {
+            { "Timer" , SetTime.ToString()}
+
+        };
+
+        return values.ToJson();
+    }
+
+
 
 }

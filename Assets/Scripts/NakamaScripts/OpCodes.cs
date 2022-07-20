@@ -11,6 +11,7 @@ public class OpCodes
     public const int undo = 7;
     public const int stack = 8;
     public const int Camera_Background = 9;
+    public const int Player_Timer = 10;
  
     
 }
