@@ -103,5 +103,17 @@ public class MatchDataJson
     }
 
 
+    public static string SetLevel(string SetLevel)
+    {
+        var values = new Dictionary<string, string>
+        {
+            { "Level" , SetLevel.ToString()}
+
+        };
+
+        return values.ToJson();
+    }
+
+
 
 }

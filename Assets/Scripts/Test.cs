@@ -28,6 +28,8 @@ public class Test : MonoBehaviour
         bool s = true;
 
         Debug.Log(s.ToString());
+
+        displayfor();
     }
 
     // Start is called before the first frame update
@@ -58,5 +60,20 @@ public class Test : MonoBehaviour
     {
         controller = !controller;
         img.SetActive(controller);
+    }
+
+
+
+    public void displayfor()
+    {
+         var index = "";
+        string[] a = { "a", "b", "c" };
+
+        for ( int i =0; i<a.Length; i++)
+        {
+            index = index + a[i];
+        }
+
+        Debug.Log(index);
     }
     }

@@ -42,8 +42,11 @@ public class Matchmaking : MonoBehaviour
     {
         Debug.Log("Finding match");
         SearchingPanel.SetActive(true);
-
+        Debug.Log(PassData.isocket);
         var matchmakingTickets = await isocket.AddMatchmakerAsync("*", 2, 2);
+
+        
+    
 
         ticket = matchmakingTickets.Ticket;
     }
@@ -106,6 +109,7 @@ public class Matchmaking : MonoBehaviour
         }
 
     }
+ 
 
 
 

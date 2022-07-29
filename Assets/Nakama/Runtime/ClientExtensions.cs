@@ -40,6 +40,7 @@ namespace Nakama
             var socket = Socket.From(client, adapter);
 #if UNITY_EDITOR
             socket.ReceivedError += Debug.LogError;
+            
 #endif
             return socket;
         }

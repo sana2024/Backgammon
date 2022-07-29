@@ -4,11 +4,15 @@ using Nakama;
 
 public class PassData
 {
+    //-----------
+    //user ID
+    //-----------
+
     public static ISocket isocket;
     public static IMatch Match;
     public static IClient iClient;
     public static ISession isession;
-    public static int DiceId;
+
 
     //-----------
     //user ID
@@ -28,5 +32,9 @@ public class PassData
 
     public static string Username;
     public static string ImageURL;
+
+
+    public static int DiceId;
+    public static string BoardType;
 
 }

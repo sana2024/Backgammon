@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject Board;
     [SerializeField] ResizeSlots resizeSlots;
     [SerializeField] GameObject CameraBackground;
+    [SerializeField] Text LevelText;
    
 
     #region Unity API
@@ -214,6 +215,13 @@ public class GameManager : MonoBehaviour
 
               int time=  int.Parse(state["Timer"]);
                 Debug.Log(time);
+
+                break;
+
+
+            case 11:
+
+                LevelText.text = state["Level"];
 
                 break;
 

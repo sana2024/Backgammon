@@ -83,13 +83,20 @@ namespace Nakama
 
         private static UnityWebRequest BuildRequest(string method, Uri uri, IDictionary<string, string> headers,
             byte[] body, int timeout)
+            
         {
+
             UnityWebRequest www;
             if (string.Equals(method, "POST", StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(method, "PUT", StringComparison.OrdinalIgnoreCase))
             {
+               // Debug.Log(uri);
+               // Debug.Log(method);
+                
+
                 www = new UnityWebRequest(uri, method)
                 {
+                   
                     uploadHandler = new UploadHandlerRaw(body),
                     downloadHandler = new DownloadHandlerBuffer()
                 };
@@ -106,7 +113,9 @@ namespace Nakama
             www.SetRequestHeader("Content-Type", "application/json");
             foreach (var kv in headers)
             {
+               // Debug.Log(kv);
                 www.SetRequestHeader(kv.Key, kv.Value);
+
             }
 
             www.timeout = timeout;

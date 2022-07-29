@@ -60,18 +60,40 @@ public class NakamaLogin : MonoBehaviour
 
     public async void OnGuestLogin()
     {
+        string displayName = "";
+        string username = "";
+        string avatarUrl = "";
+
+        var vars = new Dictionary<string, string>();
+        vars["key"] = "value";
+        vars["key2"] = "value2";
+
         iclient = Nconnect.client();
-        isession = await iclient.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier);
+        isession = await iclient.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier, create: true);
         isocket = iclient.NewSocket();
         await isocket.ConnectAsync(isession, true);
-        Debug.Log(isession + " " + isocket);
+        Debug.Log(isocket);
 
- 
+        if (isession.Created)
+        {
+            displayName = "Player" + Random.RandomRange(0, 5000);
+             username = displayName;
+             avatarUrl = "https://i.pinimg.com/564x/86/50/bf/8650bf253abad3936206478befcf7f50.jpg";
+            await iclient.UpdateAccountAsync(isession, username, displayName, avatarUrl, null, null);
 
-
-        string displayName = "Player " + Random.RandomRange(0, 5000);
-        string username = displayName;
-        const string avatarUrl = "https://i.pinimg.com/564x/86/50/bf/8650bf253abad3936206478befcf7f50.jpg";
+            PassData.isocket = isocket;
+            PassData.Username = username;
+            PassData.ImageURL = avatarUrl;
+            PassData.iClient = iclient;
+            PassData.isession = isession;
+        }
+        else
+        {
+        var account = await iclient.GetAccountAsync(isession);
+        var user = account.User;
+        displayName = user.DisplayName;
+        username = displayName;
+        avatarUrl = "https://i.pinimg.com/564x/86/50/bf/8650bf253abad3936206478befcf7f50.jpg";
         await iclient.UpdateAccountAsync(isession, username, displayName, avatarUrl, null, null);
 
         PassData.isocket = isocket;
@@ -79,6 +101,9 @@ public class NakamaLogin : MonoBehaviour
         PassData.ImageURL = avatarUrl;
         PassData.iClient = iclient;
         PassData.isession = isession;
+        }
+
+
 
  
 
