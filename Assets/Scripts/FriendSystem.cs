@@ -19,7 +19,11 @@ public class FriendSystem : MonoBehaviour
     [SerializeField] GameObject UserFound;
     [SerializeField] Text FoundUserName;
     [SerializeField] RawImage FoundUserAvatar;
-
+    [SerializeField] Button AddButton;
+    [SerializeField] GameObject FriendPrefab;
+    [SerializeField] GameObject FriendListHolderUI;
+    [SerializeField] Text FriendNameText;
+    [SerializeField] RawImage FriendAvatar;
     
 
     bool FacebookOn = false;
@@ -32,6 +36,7 @@ public class FriendSystem : MonoBehaviour
 
 
     string addFriendName;
+    GameObject friends;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +44,8 @@ public class FriendSystem : MonoBehaviour
         iclient = PassData.iClient;
         isession = PassData.isession;
         isocket = PassData.isocket;
+
+        ListFriends();
     }
 
     // Update is called once per frame
@@ -49,6 +56,7 @@ public class FriendSystem : MonoBehaviour
     public void OnFriendButtonClicked()
     {
         FriendPanel.SetActive(true);
+        ListFriends();
     }
 
     public void OnCloseButtonClicked()
@@ -79,7 +87,38 @@ public class FriendSystem : MonoBehaviour
     {
         var usernames = new[] { addFriendName };
         await iclient.AddFriendsAsync(isession, null, usernames);
+ 
     }
+
+    public async void ListFriends()
+    {
+        var result = await iclient.ListFriendsAsync(isession , null , 10);
+ 
+        foreach (var f in result.Friends)
+        { 
+           if(f.State == 0)
+            {
+                if (GameFriendListPanel.active)
+                {
+
+      
+                       friends = Instantiate(FriendPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+                       friends.transform.parent = FriendListHolderUI.transform;
+                       FriendAvatar = friends.GetComponentInChildren<RawImage>();
+                       FriendNameText = friends.GetComponentInChildren<Text>();
+                       FriendNameText.text = f.User.Username;
+                       StartCoroutine(GetTexture(f.User.AvatarUrl ,FriendAvatar ));
+                    
+
+                }
+
+            }
+
+            
+        }
+    }
+
+   
 
     public async void FindFriend()
     {
@@ -105,8 +144,28 @@ public class FriendSystem : MonoBehaviour
                 UserFound.SetActive(true);
                 FoundUserName.text = u.DisplayName;
                 addFriendName = u.DisplayName;
-                StartCoroutine(GetTexture(u.AvatarUrl));
+                StartCoroutine(GetTexture(u.AvatarUrl , FoundUserAvatar));
+
+             
+               
         }
+
+            var FriendList = await iclient.ListFriendsAsync(isession);
+
+
+            foreach (var f in FriendList.Friends)
+            {
+                if (f.User.Username == addFriendName)
+                {
+
+                    if(f.State == 0 || f.State == 1)
+                    {
+                        AddButton.interactable = false;
+                    }
+                }
+
+
+            }
         }
  
         
@@ -115,7 +174,7 @@ public class FriendSystem : MonoBehaviour
 
     }
 
-    IEnumerator GetTexture(string uri)
+    IEnumerator GetTexture(string uri , RawImage rawImage)
     {
         UnityWebRequest www = UnityWebRequestTexture.GetTexture(uri);
 
@@ -128,7 +187,8 @@ public class FriendSystem : MonoBehaviour
         else
         {
             Texture myTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
-            FoundUserAvatar.texture = myTexture;
+            rawImage.texture = myTexture;
+ 
             
         }
 

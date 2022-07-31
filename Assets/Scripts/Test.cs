@@ -7,6 +7,8 @@ public class Test : MonoBehaviour
 {
 
     [SerializeField] GameObject c;
+    [SerializeField] GameObject Friend;
+    [SerializeField] GameObject FriendHolderUI;
     int j;
     float i;
 
@@ -29,7 +31,7 @@ public class Test : MonoBehaviour
 
         Debug.Log(s.ToString());
 
-        displayfor();
+        SpawnList();
     }
 
     // Start is called before the first frame update
@@ -64,16 +66,19 @@ public class Test : MonoBehaviour
 
 
 
-    public void displayfor()
+ 
+    public void SpawnList()
     {
-         var index = "";
+  
         string[] a = { "a", "b", "c" };
 
-        for ( int i =0; i<a.Length; i++)
+        foreach(var index in a)
         {
-            index = index + a[i];
+         GameObject f=  Instantiate(Friend, Vector3.zero, Quaternion.identity) as GameObject;
+            f.transform.parent = FriendHolderUI.transform;
         }
 
-        Debug.Log(index);
     }
+
+
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 using Nakama;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class NakamaLogin : MonoBehaviour
 {
@@ -25,7 +26,8 @@ public class NakamaLogin : MonoBehaviour
     [SerializeField] Sprite GoogleIcon;
     [SerializeField] Sprite GameCenterIcon;
     [SerializeField] Sprite EditorIcon;
-
+    [SerializeField] GameObject LoadingPanel;
+    [SerializeField] VideoPlayer diceVideo;
 
     private void Start()
     {
@@ -69,11 +71,13 @@ public class NakamaLogin : MonoBehaviour
         vars["key2"] = "value2";
 
         iclient = Nconnect.client();
+        LoadingPanel.SetActive(true);
+        diceVideo.Play();
         isession = await iclient.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier, create: true);
         isocket = iclient.NewSocket();
         await isocket.ConnectAsync(isession, true);
-        Debug.Log(isocket);
 
+ 
         if (isession.Created)
         {
             displayName = "Player" + Random.RandomRange(0, 5000);
@@ -103,11 +107,9 @@ public class NakamaLogin : MonoBehaviour
         PassData.isession = isession;
         }
 
-
-
- 
-
         ChangeScene();
+        LoadingPanel.SetActive(false);
+        diceVideo.Stop();
     }
 
     public async void OnGoogleLogin()
