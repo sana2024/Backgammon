@@ -90,16 +90,18 @@ namespace Nakama
             if (string.Equals(method, "POST", StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(method, "PUT", StringComparison.OrdinalIgnoreCase))
             {
-               // Debug.Log(uri);
-               // Debug.Log(method);
-                
+          
 
+               
+ 
                 www = new UnityWebRequest(uri, method)
                 {
                    
                     uploadHandler = new UploadHandlerRaw(body),
                     downloadHandler = new DownloadHandlerBuffer()
                 };
+
+    
             }
             else if (string.Equals(method, "DELETE", StringComparison.OrdinalIgnoreCase))
             {
@@ -113,8 +115,10 @@ namespace Nakama
             www.SetRequestHeader("Content-Type", "application/json");
             foreach (var kv in headers)
             {
-               // Debug.Log(kv);
+              
+                // Debug.Log(kv);
                 www.SetRequestHeader(kv.Key, kv.Value);
+                
 
             }
 
@@ -142,6 +146,7 @@ namespace Nakama
                     var grpcCode = decoded.ContainsKey("code") ? (int) decoded["code"] : -1;
 
                     e = new ApiResponseException(www.responseCode, msg, grpcCode);
+ 
 
                     if (decoded.ContainsKey("error"))
                     {
@@ -154,6 +159,7 @@ namespace Nakama
             else
             {
                 callback?.Invoke(www.downloadHandler?.text);
+ 
             }
         }
 

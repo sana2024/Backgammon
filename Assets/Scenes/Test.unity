@@ -547,7 +547,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   c: {fileID: 7091280454122891530, guid: ecaa1690077f4427db9e9aee12e73891, type: 3}
-  Friend: {fileID: 3428239655855078632, guid: a391301e9266c43649a7b3d84cbfd292, type: 3}
+  Friend: {fileID: 702096532457679437, guid: 67316cf5245b6477284e0cad54f21460, type: 3}
   FriendHolderUI: {fileID: 62068795}
   img: {fileID: 1080486912}
   controller: 0

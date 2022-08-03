@@ -16,7 +16,7 @@ public class Notifications : MonoBehaviour
     [SerializeField] RawImage userAvatar;
     [SerializeField] GameObject NotificationPanel;
     [SerializeField] GameObject notificationPrefab;
-    [SerializeField] GameObject notificationParent;
+    [SerializeField]  Transform notificationParent;
     [SerializeField] FriendSystem friendsSystem;
 
 
@@ -65,12 +65,19 @@ public class Notifications : MonoBehaviour
 
     public async void ListNotifications()
     {
-        var result = await client.ListNotificationsAsync(session, 10);
+        var result = await client.ListNotificationsAsync(session);
+
+        foreach (Transform item in notificationParent)
+        {
+            Destroy(item.gameObject);
+        }
+
+
         foreach (var n in result.Notifications)
         {
             if (NotificationPanel.active)
             {
-                GameObject Notification = Instantiate(notificationPrefab, Vector2.zero, Quaternion.identity) as GameObject;
+                GameObject Notification = Instantiate(notificationPrefab, notificationParent);
                 Notification.transform.parent = notificationParent.transform;
                 Text Message = GameObject.Find("NotMessage").GetComponent<Text>();
                 Button AcceptButton = GameObject.Find("AcceptButton").GetComponent<Button>();

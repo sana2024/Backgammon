@@ -21,7 +21,7 @@ public class FriendSystem : MonoBehaviour
     [SerializeField] RawImage FoundUserAvatar;
     [SerializeField] Button AddButton;
     [SerializeField] GameObject FriendPrefab;
-    [SerializeField] GameObject FriendListHolderUI;
+    [SerializeField] Transform FriendListHolderUI;
     [SerializeField] Text FriendNameText;
     [SerializeField] RawImage FriendAvatar;
     
@@ -100,10 +100,12 @@ public class FriendSystem : MonoBehaviour
             {
                 if (GameFriendListPanel.active)
                 {
+                    foreach (Transform item in FriendListHolderUI) 
+                    {
+                        Destroy(item.gameObject);
+                    }
 
-      
-                       friends = Instantiate(FriendPrefab, Vector3.zero, Quaternion.identity) as GameObject;
-                       friends.transform.parent = FriendListHolderUI.transform;
+                       friends = Instantiate(FriendPrefab, FriendListHolderUI);
                        FriendAvatar = friends.GetComponentInChildren<RawImage>();
                        FriendNameText = friends.GetComponentInChildren<Text>();
                        FriendNameText.text = f.User.Username;
@@ -161,6 +163,9 @@ public class FriendSystem : MonoBehaviour
                     if(f.State == 0 || f.State == 1)
                     {
                         AddButton.interactable = false;
+                    }
+                    else { 
+                        AddButton.interactable = true;
                     }
                 }
 

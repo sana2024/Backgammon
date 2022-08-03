@@ -5,6 +5,8 @@ using Nakama;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using Nakama.Ninja.WebSockets;
+ 
 
 public class NakamaLogin : MonoBehaviour
 {
@@ -76,6 +78,7 @@ public class NakamaLogin : MonoBehaviour
         isession = await iclient.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier, create: true);
         isocket = iclient.NewSocket();
         await isocket.ConnectAsync(isession, true);
+ 
 
  
         if (isession.Created)
