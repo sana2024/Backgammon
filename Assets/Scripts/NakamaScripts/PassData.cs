@@ -37,4 +37,7 @@ public class PassData
     public static int DiceId;
     public static string BoardType;
 
+    public static int WalletMoney;
+    public static int BoardPrice;
+
 }

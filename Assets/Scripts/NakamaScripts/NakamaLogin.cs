@@ -76,6 +76,7 @@ public class NakamaLogin : MonoBehaviour
         LoadingPanel.SetActive(true);
         diceVideo.Play();
         isession = await iclient.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier, create: true);
+        isession = await iclient.SessionRefreshAsync(isession);
         isocket = iclient.NewSocket();
         await isocket.ConnectAsync(isession, true);
  

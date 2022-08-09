@@ -12,38 +12,64 @@ public class ChangeBoard : MonoBehaviour
     [SerializeField] Sprite london;
     [SerializeField] Sprite paris;
     [SerializeField] Sprite newyork;
+    [SerializeField] Sprite berlin;
+    [SerializeField] Sprite dubai;
+    [SerializeField] Sprite moscow;
+    [SerializeField] Sprite roma;
+
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log(PassData.BoardType);
         switch (PassData.BoardType)
         {
-            case "Oslo":
+            case "oslo":
 
                 BoardBackground.sprite = Oslo;
                 break;
 
-            case "Tokyo":
+            case "tokyo":
                 BoardBackground.sprite = tokyo;
 
                 break;
 
-            case "Boston":
+            case "boston":
                 BoardBackground.sprite = boston;
 
                 break;
 
-            case "London":
+            case "london":
                 BoardBackground.sprite = london;
 
                 break;
 
-            case "Paris":
+            case "paris":
                 BoardBackground.sprite = paris;
 
                 break;
 
-            case "Newyork":
+            case "newyork":
                 BoardBackground.sprite = newyork;
+
+                break;
+
+            case "berlin":
+                BoardBackground.sprite = berlin;
+
+                break;
+
+            case "dubai":
+                BoardBackground.sprite = dubai;
+
+                break;
+
+            case "moscow":
+                BoardBackground.sprite = moscow;
+
+                break;
+
+            case "roma":
+                BoardBackground.sprite = roma;
 
                 break;
         }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Test : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Test : MonoBehaviour
     [SerializeField] GameObject c;
     [SerializeField] GameObject Friend;
     [SerializeField] GameObject FriendHolderUI;
+    [SerializeField] Button testbtn;
     int j;
     float i;
 
@@ -32,6 +34,8 @@ public class Test : MonoBehaviour
         Debug.Log(s.ToString());
 
         SpawnList();
+
+        testbtn.onClick.AddListener(onTestClicked);
     }
 
     // Start is called before the first frame update
@@ -78,6 +82,14 @@ public class Test : MonoBehaviour
             f.transform.parent = FriendHolderUI.transform;
         }
 
+    }
+
+
+    public async void onTestClicked()
+    {
+
+
+        Debug.Log("hello");
     }
 
 

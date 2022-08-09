@@ -16,11 +16,14 @@ public class UserProfile : MonoBehaviour
     ISession session;
     ISocket isocket;
 
-  
+
 
     //USER DATAS
-    int levelValue = 1;
+ 
+    public int sendLevel = 1;
     int wins = 0;
+    int walletMoney;
+    int BoardPrice;
 
 
     //USER TEXTFRIENDS
@@ -33,6 +36,7 @@ public class UserProfile : MonoBehaviour
     [SerializeField] Text CoinUserPanelText;
     [SerializeField] Text CoinText;
     [SerializeField] Text WinText;
+    
  
 
     // Start is called before the first frame update
@@ -45,35 +49,18 @@ public class UserProfile : MonoBehaviour
 
         // WriteData();
 
-        ReadData();
+      //  ReadData();
 
         getUserProfile();
 
         //AddLeaderboard();
 
-       // Wallet();
+          Wallet();
 
-        // rpc();
-
-
-
- 
-      
-        
-    
-
- 
 
         }
 
  
-
-    public async void rpc()
-    {
-        var rpcid = "users";
-        var pokemonInfo = await client.RpcAsync(session, rpcid);
-        Debug.Log(pokemonInfo.Payload);
-    }
 
 
     public async void WriteData(int levelvalue, int winsvalue)
@@ -110,11 +97,6 @@ public class UserProfile : MonoBehaviour
   }
 });
 
- 
-
-
-
-
 
         if (result.Objects.Any())
         {
@@ -122,11 +104,14 @@ public class UserProfile : MonoBehaviour
             var datas = JsonParser.FromJson<PlayerDataObj>(storageObject.Value);
  
 
-            levelValue = int.Parse(datas.Level);
+           sendLevel = int.Parse(datas.Level);
+         
         }
         else
         {
-            WriteData(levelValue, wins);
+ 
+            WriteData(sendLevel, wins);
+            
 
 
         }
@@ -136,16 +121,36 @@ public class UserProfile : MonoBehaviour
 
     public async void Wallet()
     {
+
+ 
+
         var account = await client.GetAccountAsync(session);
         var wallet = JsonParser.FromJson<Dictionary<string, int>>(account.Wallet);
-
 
         foreach (var currency in wallet.Values)
         {
             CoinText.text = currency.ToString();
             CoinUserPanelText.text = currency.ToString();
+            walletMoney = currency;
+            PassData.WalletMoney = currency;
+           
 
         }
+    }
+
+    public async void updateWallet(int coins)
+    {
+        PassData.BoardPrice = coins;
+        if(walletMoney >= Math.Abs(coins))
+        {
+        var payload = JsonWriter.ToJson(new { coins = coins });
+        var rpcid = "Update_Wallet";
+        var WalletRPC = await client.RpcAsync(session, rpcid, payload);
+        Wallet();
+        }
+
+       
+
     }
 
     public async void AddLeaderboard()
@@ -160,8 +165,12 @@ public class UserProfile : MonoBehaviour
 
     public void Update()
     {
-        LevelText.text = levelValue.ToString();
+        LevelText.text = sendLevel.ToString();
         WinText.text = wins.ToString();
+
+        ReadData();
+
+       
     }
 
 

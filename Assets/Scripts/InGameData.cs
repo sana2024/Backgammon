@@ -43,8 +43,6 @@ public class InGameData : MonoBehaviour
         UserId = session.UserId
   }
 });
-
- 
         if (result.Objects.Any())
         {
             var storageObject = result.Objects.First();

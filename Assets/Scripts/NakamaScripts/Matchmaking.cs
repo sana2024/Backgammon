@@ -23,7 +23,8 @@ public class Matchmaking : MonoBehaviour
  
 
     [SerializeField] GameObject SearchingPanel;
- 
+    [SerializeField] UserProfile userProfile;
+    [SerializeField] GameObject NoEnoughCoinPanel;
 
 
     // Start is called before the first frame update
@@ -38,23 +39,78 @@ public class Matchmaking : MonoBehaviour
 
     }
 
-    public async void FindMatch()
+    public async void FindMatch(string BoardName)
     {
+
+        PassData.BoardType = BoardName;
+
+        int wallet = Math.Abs(PassData.WalletMoney);
+        int boardPrice = Math.Abs(PassData.BoardPrice);
+
+ 
+        if (wallet >= boardPrice)
+        {
         Debug.Log("Finding match");
         SearchingPanel.SetActive(true);
-        Debug.Log(PassData.isocket);
-        var matchmakingTickets = await isocket.AddMatchmakerAsync("*", 2, 2);
 
-        
-    
+        var properites = new Dictionary<string, string>() {
+          {"board", BoardName}
+         };
+        var query = "+properties.board:"+BoardName;
+
+        var matchmakingTickets = await isocket.AddMatchmakerAsync(query, 2, 2, properites);
 
         ticket = matchmakingTickets.Ticket;
+
+        }
+        else
+        {
+            StartCoroutine(NoMoneyPanelTimer());
+            Debug.Log("you dont have enough money");
+        }
+
+    }
+
+    IEnumerator NoMoneyPanelTimer()
+    {
+        NoEnoughCoinPanel.SetActive(true);
+        yield return new WaitForSeconds(2);
+        NoEnoughCoinPanel.SetActive(false);
+    }
+ 
+ 
+    public async void RemoveTicket()
+    {
+ 
+        await isocket.RemoveMatchmakerAsync(ticket);
+        SearchingPanel.SetActive(false);
+        
     }
 
     private async void OnREceivedMatchmakerMatched(IMatchmakerMatched matchmakerMatched)
     {
+        var users = matchmakerMatched.Users;
+
+  
+       
+        
+        foreach(var u in users)
+        {
+
+            var ids = new[] { u.Presence.UserId};
+            var result = await PassData.iClient.GetUsersAsync(PassData.isession, ids);
+
+            foreach (var user in result.Users)
+            {
+               
+            }
+        }
+
+
 
         var match = await isocket.JoinMatchAsync(matchmakerMatched);
+
+        
 
         hostPresence = matchmakerMatched.Users.OrderBy(x => x.Presence.SessionId).First().Presence;
         SecondPresence = matchmakerMatched.Users.OrderBy(x => x.Presence.SessionId).Last().Presence;
@@ -72,7 +128,7 @@ public class Matchmaking : MonoBehaviour
         {
             Debug.Log("we Joined A match");
 
- 
+           
 
             SceneManager.LoadScene("GameScene");
 
@@ -81,6 +137,7 @@ public class Matchmaking : MonoBehaviour
             {
                 PassData.OtherUserId = presence.UserId;
                 PassData.otherUsername = presence.Username;
+                
             }
 
 
@@ -92,6 +149,7 @@ public class Matchmaking : MonoBehaviour
     {
         foreach (var user in matchPresenceEvent.Joins)
         {
+           
    
             SceneManager.LoadScene("GameScene");
  

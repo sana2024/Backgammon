@@ -48,6 +48,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] ResizeSlots resizeSlots;
     [SerializeField] GameObject CameraBackground;
     [SerializeField] Text LevelText;
+    [SerializeField] GameObject EndGamePanel;
+    [SerializeField] GameObject PlayerEndResultImage;
+    [SerializeField] Sprite winnerSprite;
+    [SerializeField] Sprite looserSprite;
    
 
     #region Unity API
@@ -415,6 +419,8 @@ public class GameManager : MonoBehaviour
             // increment won round of player
             playerWonRound.score += score;
 
+
+
             ShowGameEndScreen();
         }
     }
@@ -488,6 +494,7 @@ public class GameManager : MonoBehaviour
 
         if (whiteFinished)
             playerWonRound = playerWhite;
+            
 
         if (blackFinished)
             playerWonRound = playerBlack;
