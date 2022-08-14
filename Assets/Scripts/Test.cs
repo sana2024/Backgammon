@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
+
 
 public class Test : MonoBehaviour
 {
@@ -13,6 +15,8 @@ public class Test : MonoBehaviour
     [SerializeField] Button testbtn;
     int j;
     float i;
+
+    float amount = 2;
 
     
 
@@ -34,9 +38,27 @@ public class Test : MonoBehaviour
         Debug.Log(s.ToString());
 
         SpawnList();
-
-        testbtn.onClick.AddListener(onTestClicked);
+ 
     }
+
+    public void Update()
+    {
+ 
+    }
+
+    IEnumerator checkInternetConnection()
+    {
+
+        UnityWebRequest request = new UnityWebRequest("http://google.com");
+        yield return request.SendWebRequest();
+
+        if(request.error != null)
+        {
+           
+        }
+    }
+
+
 
     // Start is called before the first frame update
     public void onclick()
@@ -85,11 +107,12 @@ public class Test : MonoBehaviour
     }
 
 
-    public async void onTestClicked()
+    public void onTestClicked()
     {
-
-
-        Debug.Log("hello");
+        amount *= 2;
+        Debug.Log(amount);
+     
+ 
     }
 
 

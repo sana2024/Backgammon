@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Nakama;
+using UnityEngine.UI;
 
 public class ButtonController : MonoBehaviour
 {
@@ -11,9 +12,17 @@ public class ButtonController : MonoBehaviour
     [SerializeField] GameObject undoButton;
     [SerializeField] GameObject rollButton;
     [SerializeField] GameObject doneButton;
-
+    [SerializeField] GameObject DoubleButton;
+    [SerializeField] GameObject EndGamePanel;
+    [SerializeField] GameObject LosserImage;
+    [SerializeField] Image EndScreenBackground;
+    [SerializeField] Sprite RedImg;
     //Menu button
     [SerializeField] GameObject menuPanel;
+    [SerializeField] GameManager gameManager;
+    [SerializeField] HelloVideoAgora AgoraVideo;
+    [SerializeField] PlayerTimer playerTimer;
+
 
  
   
@@ -63,11 +72,49 @@ public class ButtonController : MonoBehaviour
     public async void OnLeaveClicked()
     {
 
-        await PassData.isocket.LeaveMatchAsync(PassData.Match.Id);
-        SceneManager.LoadScene("Menu");
-        Debug.Log("player left game");
+        GameOver();
  
     }
+
+    public void EnableDoubleButton()
+    {
+        DoubleButton.SetActive(true);
+    }
+
+    public void DisableDoubleButton()
+    {
+        DoubleButton.SetActive(false);
+    }
+
+
+    public async void GameOver()
+    {
+
+        var state = MatchDataJson.SetLeaveMatch("leave");
+        gameManager.SendMatchState(OpCodes.Leave_match , state);
+        await PassData.isocket.LeaveMatchAsync(PassData.Match.Id);
+        EndGamePanel.SetActive(true);
+        LosserImage.SetActive(true);
+        EndScreenBackground.sprite = RedImg;
+
+        AgoraVideo.OnApplicationQuit();
+
+
+
+
+        playerTimer.GameEnded();
+
+
+
+    }
+ 
+
+    public void LeaveScene()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+
+
 
 
 }

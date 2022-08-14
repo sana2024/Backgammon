@@ -13,6 +13,10 @@ public class OpCodes
     public const int Camera_Background = 9;
     public const int Player_Timer = 10;
     public const int Player_Level = 11;
+    public const int Request_Bet = 12;
+    public const int Accept_Bet = 13;
+    public const int Reject_Bet = 14;
+    public const int Leave_match = 15;
  
     
 }

@@ -213,7 +213,7 @@ public class DiceController : MonoBehaviour
     public void ThrowDicesRecive(IDictionary <string, string> state)
     {
         var throwLocation = GetThrowLocation();
-        var direction = throwLocation.direction;
+        var direction = -throwLocation.direction;
         var pos = new Vector3(float.Parse(state["Pos_X"]), float.Parse(state["Pos_Y"]));
         var speed = 5f;
  
@@ -250,18 +250,19 @@ public class DiceController : MonoBehaviour
     private void InitializeDices()
     {
         int index = 0;
+        Vector2 postion = new Vector2(2.85f,3);
 
         // instantiate 2 white dices
         for (int i = 0; i < 2; i++, index++)
         {
-            dices[index] = Instantiate(whiteDicePrefab, Vector3.zero, Quaternion.identity);
+            dices[index] = Instantiate(whiteDicePrefab, postion, Quaternion.identity);
             dices[index].DiceID = index + 1;
         }
 
         // instantiate 2 black dices
         for (int i = 0; i < 2; i++, index++)
         {
-            dices[index] = Instantiate(blackDicePrefab, Vector3.zero, Quaternion.identity);
+            dices[index] = Instantiate(blackDicePrefab, postion, Quaternion.identity);
             dices[index].DiceID = index - 1;
 
         }

@@ -32,12 +32,14 @@ public class PassData
 
     public static string Username;
     public static string ImageURL;
-
-
     public static int DiceId;
     public static string BoardType;
-
     public static int WalletMoney;
     public static int BoardPrice;
+    public static int betAmount;
+    public static int wins;
+    public static int losses;
+    public static int level;
+    public static string version;
 
 }

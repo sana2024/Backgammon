@@ -13,9 +13,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public GameObject gameEndScreen;
 
-    
     //-----------------
     //Player properties
     //-----------------
@@ -34,7 +32,8 @@ public class GameManager : MonoBehaviour
     public Button rollButton;
     public Image firstDiceValueImage;
     public Image secondDiceValueImage;
-    [SerializeField] ButtonController buttonController; 
+    [SerializeField] ButtonController buttonController;
+    public GameObject gameEndScreen;
 
     //rounds
     private const int ROUND_LIMIT = 3;
@@ -43,16 +42,34 @@ public class GameManager : MonoBehaviour
     //nakama components
     ISocket isocket;
 
-    //Bourd
+    //Board
     [SerializeField] GameObject Board;
     [SerializeField] ResizeSlots resizeSlots;
     [SerializeField] GameObject CameraBackground;
     [SerializeField] Text LevelText;
     [SerializeField] GameObject EndGamePanel;
-    [SerializeField] GameObject PlayerEndResultImage;
-    [SerializeField] Sprite winnerSprite;
-    [SerializeField] Sprite looserSprite;
-   
+    [SerializeField] Image EndGameBackground;
+    [SerializeField] GameObject WinnerImage;
+    [SerializeField] GameObject losserImage;
+    [SerializeField] Sprite RedBackground;
+    [SerializeField] Sprite GreenBackground;
+ 
+    [SerializeField] PlayerTimer playerTimer;
+    [SerializeField] GameObject DoublePanel;
+    [SerializeField] GameObject AcceptedPanel;
+    [SerializeField] HelloVideoAgora VideoAgora;
+    [SerializeField] Bet bet;
+
+    [SerializeField] Text MyScoreText;
+    [SerializeField] Text OponentScoreText;
+
+    [SerializeField] GameObject Reward;
+
+    [SerializeField] InGameData inGameData;
+
+    //Others
+    int RollCounters = 1;
+
 
     #region Unity API
 
@@ -74,6 +91,7 @@ public class GameManager : MonoBehaviour
         if(PassData.Match.Self.UserId == playerBlack.UserId)
         {
             resizeSlots.rotate();
+
         }
 
  
@@ -115,8 +133,13 @@ public class GameManager : MonoBehaviour
         {
             case 6:
 
- 
                  buttonController.EnableRollButton();
+
+                if (RollCounters > 1)
+                {
+                 buttonController.EnableDoubleButton();
+                }
+
 
                
 
@@ -229,12 +252,64 @@ public class GameManager : MonoBehaviour
 
                 break;
 
+
+
+            case 12:
+
+                if(state["Double"]== "true")
+                {
+                    DoublePanel.SetActive(true);
+                }
+
+                break;
+
+
+            case 13:
+
+                StartCoroutine(ShowAcceptPanel());
+                bet.IncreaseBet();
+
+                break;
+
+
+            case 14:
+
+                await PassData.isocket.LeaveMatchAsync(PassData.Match.Id);
+                SceneManager.LoadScene("Menu");
+                VideoAgora.OnApplicationQuit();
+
+
+                break;
+
+
+            case 15:
+
+                Debug.Log("other player left the game");
+                gameEndScreen.SetActive(true);
+                WinnerImage.SetActive(true);
+                EndGameBackground.sprite = GreenBackground;
+                Reward.SetActive(true);
+                inGameData.updateWallet(PassData.betAmount);
+                PassData.wins++;
+                inGameData.WriteWinsAndLosses(PassData.level, PassData.wins, PassData.losses);
+                playerTimer.GameEnded();
+                VideoAgora.OnApplicationQuit();
+
+                break;
+
         }
 
 
     }
 
- 
+    IEnumerator ShowAcceptPanel()
+    {
+        AcceptedPanel.SetActive(true);
+        yield return new WaitForSeconds(3);
+        AcceptedPanel.SetActive(false);
+    }
+
+
 
     private void Update()
     {
@@ -243,7 +318,27 @@ public class GameManager : MonoBehaviour
             ShowDiceValues();
         }
 
+        if(turnPlayer.UserId == PassData.Match.Self.UserId)
+        {
+            playerTimer.OtherPlayerTimer.fillAmount = 1;
+            playerTimer.playerTimer();
+  
+        }
+        else
+        {
+            playerTimer.OponentTimer();
+        }
 
+        if (turnPlayer.IsMoveLeft() || turnPlayer.rolledDice == false)
+        {
+            nextTurnButton.interactable = false;
+        }
+        else
+        {
+            nextTurnButton.interactable = true;
+        }
+
+        
  
     }
 
@@ -262,15 +357,19 @@ public class GameManager : MonoBehaviour
         if (!turnPlayer.rolledDice)
         {
             Debug.Log("you have to roll the dice");
+ 
             return;
         }
 
         if (turnPlayer.IsMoveLeft())
         {
+ 
             Debug.Log("You have to move");
             return;
         }
 
+ 
+        playerTimer.restart();
         NextTurn();
     }
 
@@ -297,19 +396,22 @@ public class GameManager : MonoBehaviour
 
     private void UpdateGameEndScreen()
     {
-        // get ui elements
-        var roundText = gameEndScreen.transform.Find(UI_TEXT_ROUND).GetComponent<Text>();
-        var playerWhiteScoreText = gameEndScreen.transform.Find(UI_PANEL_SCORE).Find(UI_PANEL_SCORE_PLAYER_WHITE).Find(UI_TEXT_SCORE).GetComponent<Text>();
-        var playerBlackScoreText = gameEndScreen.transform.Find(UI_PANEL_SCORE).Find(UI_PANEL_SCORE_PLAYER_BLACK).Find(UI_TEXT_SCORE).GetComponent<Text>();
 
-        // update ui elements
-        if (!IsAnyPlayerWon())
-            roundText.text = $"Round { currentRound }";
-        else
-            roundText.text = $"Player { Player.Winner(playerWhite, playerBlack).id } won";
+        if (IsAnyPlayerWon())
+        {
+            if(playerWonRound.UserId == PassData.Match.Self.UserId)
+            {
+                EndGamePanel.SetActive(true);
+ 
+            }
+            if(playerWonRound.UserId != PassData.Match.Self.UserId)
+            {
+                EndGamePanel.SetActive(true);
+ 
 
-        playerWhiteScoreText.text = playerWhite.score.ToString();
-        playerBlackScoreText.text = playerBlack.score.ToString();
+            }
+        }
+
     }
 
     private bool IsAnyPlayerWon()
@@ -354,10 +456,12 @@ public class GameManager : MonoBehaviour
 
     private void RollDices()
     {
+        RollCounters ++;
          if(currentPlayer.UserId == PassData.Match.Self.UserId)
             {
         if (!currentPlayer.rolledDice)
         {
+ 
             DiceController.instance.ThrowDices();
             currentPlayer.rolledDice = true;
             StartCoroutine(AfterRolledDice());
@@ -416,14 +520,43 @@ public class GameManager : MonoBehaviour
         if (IsFinished())
         {
             var score = CalculateScore();
+
+            Debug.Log("score " + score);
             // increment won round of player
             playerWonRound.score += score;
 
+            if (playerWonRound.UserId == PassData.Match.Self.UserId)
+            {
+                WinnerImage.SetActive(true);
+                EndGameBackground.sprite = GreenBackground;
+                MyScoreText.text = score.ToString();
+                Reward.SetActive(true);
+                inGameData.updateWallet(PassData.betAmount);
+                VideoAgora.OnApplicationQuit();
+                playerTimer.GameEnded();
 
+                PassData.wins++;
 
-            ShowGameEndScreen();
+                inGameData.WriteWinsAndLosses(PassData.level , PassData.wins , PassData.losses);
+            }
+            else
+            {
+                losserImage.SetActive(true);
+                EndGameBackground.sprite = RedBackground;
+                OponentScoreText.text = score.ToString();
+                VideoAgora.OnApplicationQuit();
+                playerTimer.GameEnded();
+
+                PassData.losses++;
+                inGameData.WriteWinsAndLosses(PassData.level, PassData.wins, PassData.losses);
+            }
+
+                ShowGameEndScreen();
         }
     }
+
+
+
 
     #endregion
 

@@ -11,20 +11,23 @@ public class ResizeSlots : MonoBehaviour
     [SerializeField] GameObject Boards;
 
     [SerializeField] ThrowLocation DiceLocation;
+    [SerializeField] GameObject ThrowLocation;
 
     
 
     private void Start()
     {
-     
 
+ 
     }
 
     public void rotate()
     {
          Boards.transform.Rotate(180, 0, 0);
+        ThrowLocation.transform.position = new Vector2(2.85f, -3);
+        
 
-        DiceLocation.direction = new Vector2(-0.98f, -1.9f);
+ 
     }
 
     public void Resize()

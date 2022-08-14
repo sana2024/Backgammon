@@ -30,6 +30,7 @@ public class NakamaLogin : MonoBehaviour
     [SerializeField] Sprite EditorIcon;
     [SerializeField] GameObject LoadingPanel;
     [SerializeField] VideoPlayer diceVideo;
+    [SerializeField] GameObject ConnectionPanel;
 
     private void Start()
     {
@@ -64,56 +65,68 @@ public class NakamaLogin : MonoBehaviour
 
     public async void OnGuestLogin()
     {
-        string displayName = "";
-        string username = "";
-        string avatarUrl = "";
-
-        var vars = new Dictionary<string, string>();
-        vars["key"] = "value";
-        vars["key2"] = "value2";
-
-        iclient = Nconnect.client();
-        LoadingPanel.SetActive(true);
-        diceVideo.Play();
-        isession = await iclient.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier, create: true);
-        isession = await iclient.SessionRefreshAsync(isession);
-        isocket = iclient.NewSocket();
-        await isocket.ConnectAsync(isession, true);
- 
-
- 
-        if (isession.Created)
+        if (Application.internetReachability == NetworkReachability.NotReachable)
         {
-            displayName = "Player" + Random.RandomRange(0, 5000);
-             username = displayName;
-             avatarUrl = "https://i.pinimg.com/564x/86/50/bf/8650bf253abad3936206478befcf7f50.jpg";
-            await iclient.UpdateAccountAsync(isession, username, displayName, avatarUrl, null, null);
-
-            PassData.isocket = isocket;
-            PassData.Username = username;
-            PassData.ImageURL = avatarUrl;
-            PassData.iClient = iclient;
-            PassData.isession = isession;
+            ConnectionPanel.SetActive(true);
         }
         else
         {
-        var account = await iclient.GetAccountAsync(isession);
-        var user = account.User;
-        displayName = user.DisplayName;
-        username = displayName;
-        avatarUrl = "https://i.pinimg.com/564x/86/50/bf/8650bf253abad3936206478befcf7f50.jpg";
-        await iclient.UpdateAccountAsync(isession, username, displayName, avatarUrl, null, null);
 
-        PassData.isocket = isocket;
-        PassData.Username = username;
-        PassData.ImageURL = avatarUrl;
-        PassData.iClient = iclient;
-        PassData.isession = isession;
+
+
+            ConnectionPanel.SetActive(false);
+            string displayName = "";
+            string username = "";
+            string avatarUrl = "";
+
+            var vars = new Dictionary<string, string>();
+            vars["key"] = "value";
+            vars["key2"] = "value2";
+
+            iclient = Nconnect.client();
+            LoadingPanel.SetActive(true);
+            diceVideo.Play();
+            isession = await iclient.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier, create: true);
+            isession = await iclient.SessionRefreshAsync(isession);
+            isocket = iclient.NewSocket();
+            await isocket.ConnectAsync(isession, true);
+
+
+
+            if (isession.Created)
+            {
+                displayName = "Player" + Random.RandomRange(0, 5000);
+                username = displayName;
+                avatarUrl = "https://i.pinimg.com/564x/86/50/bf/8650bf253abad3936206478befcf7f50.jpg";
+                await iclient.UpdateAccountAsync(isession, username, displayName, avatarUrl, null, null);
+
+                PassData.isocket = isocket;
+                PassData.Username = username;
+                PassData.ImageURL = avatarUrl;
+                PassData.iClient = iclient;
+                PassData.isession = isession;
+            }
+            else
+            {
+                var account = await iclient.GetAccountAsync(isession);
+                var user = account.User;
+                displayName = user.DisplayName;
+                username = displayName;
+                avatarUrl = "https://i.pinimg.com/564x/86/50/bf/8650bf253abad3936206478befcf7f50.jpg";
+                await iclient.UpdateAccountAsync(isession, username, displayName, avatarUrl, null, null);
+
+                PassData.isocket = isocket;
+                PassData.Username = username;
+                PassData.ImageURL = avatarUrl;
+                PassData.iClient = iclient;
+                PassData.isession = isession;
+            }
+
+            ChangeScene();
+            LoadingPanel.SetActive(false);
+            diceVideo.Stop();
+
         }
-
-        ChangeScene();
-        LoadingPanel.SetActive(false);
-        diceVideo.Stop();
     }
 
     public async void OnGoogleLogin()
@@ -156,6 +169,18 @@ public class NakamaLogin : MonoBehaviour
     private void ChangeScene()
     {
         SceneManager.LoadScene("Menu");
+    }
+
+
+    public void Update()
+    {
+
+
+        if (Application.internetReachability != NetworkReachability.NotReachable)
+        {
+            ConnectionPanel.SetActive(false);
+        }
+
     }
 
 

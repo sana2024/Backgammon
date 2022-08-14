@@ -5,14 +5,21 @@ using UnityEngine.UI;
 using Nakama;
 using Nakama.TinyJson;
 using System.Linq;
+using UnityEngine.Networking;
+using System;
 
 public class InGameData : MonoBehaviour
 {
 
     [SerializeField] Text LocalUsername;
     [SerializeField] Text RemoteUsername;
+    [SerializeField] Text DoubleUsername;
+    [SerializeField] Text AcceptUsername;
     [SerializeField] Text LevelText;
     [SerializeField] GameManager gameManager;
+    [SerializeField] RawImage MyAvatar;
+    [SerializeField] RawImage OponentAvatar;
+    [SerializeField] Text RewardAmount;
     IClient client;
     ISession session;
     
@@ -24,13 +31,17 @@ public class InGameData : MonoBehaviour
         session = PassData.isession;
         LocalUsername.text = PassData.Match.Self.Username;
         RemoteUsername.text = PassData.otherUsername;
+        DoubleUsername.text = PassData.otherUsername;
+        AcceptUsername.text = PassData.otherUsername;
 
+ 
+       ReadData();
 
     }
 
     public void Update()
     {
-           ReadData();
+        RewardAmount.text = PassData.betAmount.ToString();   
     }
 
 
@@ -54,4 +65,68 @@ public class InGameData : MonoBehaviour
         }
 
     }
+
+
+    IEnumerator GetTexture(string URL , RawImage avatar)
+    {
+        UnityWebRequest www = UnityWebRequestTexture.GetTexture(URL);
+
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            Texture myTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+
+            avatar.texture = myTexture;
+        }
+
     }
+
+ 
+
+    public async void updateWallet(int coins)
+    {
+        PassData.BoardPrice = coins;
+        PassData.betAmount = Math.Abs(coins);
+
+  
+            var payload = JsonWriter.ToJson(new { coins = coins });
+            var rpcid = "Update_Wallet";
+            var WalletRPC = await client.RpcAsync(session, rpcid, payload);
+     
+
+    }
+
+
+    public async void WriteWinsAndLosses(int levelValue ,int winsvalue , int lossesValue )
+    {
+
+        var Datas = new PlayerDataObj
+        {
+            Losses = lossesValue.ToString(), 
+            wins = winsvalue.ToString(),
+            Level = levelValue.ToString(),
+        };
+
+        var Sendata = await client.WriteStorageObjectsAsync(session, new[] {
+        new WriteStorageObject
+  {
+      Collection = "UserData",
+      Key = "Data",
+      Value = JsonWriter.ToJson(Datas),
+      Version = PassData.version
+
+
+  }
+});
+        Debug.Log("Version " + PassData.version);
+        Debug.Log("wins " + winsvalue);
+        Debug.Log("loss " + lossesValue);
+
+    }
+ 
+}

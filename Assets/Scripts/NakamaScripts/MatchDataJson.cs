@@ -115,5 +115,50 @@ public class MatchDataJson
     }
 
 
+    public static string SetDouble(string Double)
+    {
+        var values = new Dictionary<string, string>
+        {
+            { "Double" , Double.ToString()}
+
+        };
+
+        return values.ToJson();
+    }
+
+    public static string SetAccept(string Accept)
+    {
+        var values = new Dictionary<string, string>
+        {
+            { "Accept" , Accept.ToString()}
+
+        };
+
+        return values.ToJson();
+    }
+
+    public static string SetReject(string Reject)
+    {
+        var values = new Dictionary<string, string>
+        {
+            { "Reject" , Reject.ToString()}
+
+        };
+
+        return values.ToJson();
+    }
+
+    public static string SetLeaveMatch(string Leave)
+    {
+        var values = new Dictionary<string, string>
+        {
+            { "Leave" , Leave.ToString()}
+
+        };
+
+        return values.ToJson();
+    }
+
+
 
 }

@@ -116,7 +116,7 @@ public class Piece : MonoBehaviour
                 {
                     if (this != null)
                     {
-                        transform.position = new Vector2(float.Parse(state["Pos_x"]), -float.Parse(state["pos_y"]));
+                        transform.position = new Vector2(float.Parse(state["Pos_x"]), -float.Parse(state["pos_y"])-0.15f);
 
                       
                     }

@@ -22,6 +22,7 @@ public class UserProfile : MonoBehaviour
  
     public int sendLevel = 1;
     int wins = 0;
+    int losses = 0;
     int walletMoney;
     int BoardPrice;
 
@@ -36,6 +37,7 @@ public class UserProfile : MonoBehaviour
     [SerializeField] Text CoinUserPanelText;
     [SerializeField] Text CoinText;
     [SerializeField] Text WinText;
+    [SerializeField] Text LossText;
     
  
 
@@ -57,19 +59,21 @@ public class UserProfile : MonoBehaviour
 
           Wallet();
 
+  
 
-        }
+    }
 
  
 
 
-    public async void WriteData(int levelvalue, int winsvalue)
+    public async void WriteData(int levelvalue, int winsvalue , int LossValue)
     {
 
         var Datas = new PlayerDataObj
         {
             Level = levelvalue.ToString(),
-            wins = winsvalue.ToString()
+            wins = winsvalue.ToString(),
+            Losses = LossValue.ToString()
         };
 
         var Sendata = await client.WriteStorageObjectsAsync(session, new[] {
@@ -78,10 +82,13 @@ public class UserProfile : MonoBehaviour
       Collection = "UserData",
       Key = "Data",
       Value = JsonWriter.ToJson(Datas),
+      Version = PassData.version
 
 
-  }
-});
+
+    }
+}); ;
+ 
 
         Debug.Log(string.Join(",\n  ", Sendata));
 
@@ -105,12 +112,20 @@ public class UserProfile : MonoBehaviour
  
 
            sendLevel = int.Parse(datas.Level);
-         
+           wins = int.Parse(datas.wins);
+           losses = int.Parse(datas.Losses);
+
+            PassData.version = storageObject.Version;
+
+            PassData.wins = int.Parse(datas.wins);
+            PassData.losses = int.Parse(datas.Losses);
+            PassData.level = int.Parse(datas.Level);
+
         }
         else
         {
  
-            WriteData(sendLevel, wins);
+            WriteData(sendLevel, wins, losses);
             
 
 
@@ -141,6 +156,8 @@ public class UserProfile : MonoBehaviour
     public async void updateWallet(int coins)
     {
         PassData.BoardPrice = coins;
+        PassData.betAmount = Math.Abs(coins);
+
         if(walletMoney >= Math.Abs(coins))
         {
         var payload = JsonWriter.ToJson(new { coins = coins });
@@ -167,6 +184,7 @@ public class UserProfile : MonoBehaviour
     {
         LevelText.text = sendLevel.ToString();
         WinText.text = wins.ToString();
+        LossText.text = losses.ToString();
 
         ReadData();
 
