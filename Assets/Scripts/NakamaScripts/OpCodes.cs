@@ -17,6 +17,7 @@ public class OpCodes
     public const int Accept_Bet = 13;
     public const int Reject_Bet = 14;
     public const int Leave_match = 15;
+    public const int Reject_Match = 16;
  
     
 }

@@ -17,6 +17,7 @@ public class NakamaConnection : ScriptableObject
  
     public IClient client()
     {
+
         iclient = new Client(scheme, host, port, serverKey, UnityWebRequestAdapter.Instance);
         iclient.Timeout = 5;
  

@@ -66,6 +66,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject Reward;
 
     [SerializeField] InGameData inGameData;
+    [SerializeField] Image MyChecker;
+    [SerializeField] Image OponentChecker;
+    [SerializeField] Sprite WhiteChecker;
+    [SerializeField] Sprite BlackChecker;
+
+    [SerializeField] GameObject RejectBetPanel;
+    [SerializeField] GameObject RejectGamePanel;
+
+ 
 
     //Others
     int RollCounters = 1;
@@ -116,6 +125,18 @@ public class GameManager : MonoBehaviour
         {
             buttonController.EnableRollButton();
 
+        }
+
+        if(playerWhite.UserId == PassData.Match.Self.UserId)
+        {
+            MyChecker.sprite = WhiteChecker;
+            OponentChecker.sprite = BlackChecker;
+
+        }
+        else
+        {
+            MyChecker.sprite = BlackChecker;
+            OponentChecker.sprite = WhiteChecker;
         }
     }
 
@@ -275,7 +296,7 @@ public class GameManager : MonoBehaviour
             case 14:
 
                 await PassData.isocket.LeaveMatchAsync(PassData.Match.Id);
-                SceneManager.LoadScene("Menu");
+                StartCoroutine(ShowRejectBetPanel());
                 VideoAgora.OnApplicationQuit();
 
 
@@ -297,6 +318,20 @@ public class GameManager : MonoBehaviour
 
                 break;
 
+
+            case 16:
+
+                if (state["Leave"] == "Left")
+                {
+
+                    StartCoroutine(ShowRejectGamePanel());
+
+                }
+
+ 
+
+                    break;
+
         }
 
 
@@ -308,6 +343,23 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3);
         AcceptedPanel.SetActive(false);
     }
+
+
+    IEnumerator ShowRejectBetPanel()
+    {
+        RejectBetPanel.SetActive(true);
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadScene("Menu");
+    }
+
+    IEnumerator ShowRejectGamePanel()
+    {
+        RejectGamePanel.SetActive(true);
+        yield return new WaitForSeconds(3);
+        VideoAgora.OnApplicationQuit();
+        SceneManager.LoadScene("Menu");
+    }
+
 
 
 

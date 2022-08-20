@@ -34,8 +34,11 @@ public class InGameData : MonoBehaviour
         DoubleUsername.text = PassData.otherUsername;
         AcceptUsername.text = PassData.otherUsername;
 
- 
-       ReadData();
+        StartCoroutine(GetTexture(PassData.MyURL , MyAvatar));
+        StartCoroutine(GetTexture(PassData.OpponentURL, OponentAvatar));
+
+
+        ReadData();
 
     }
 
@@ -128,5 +131,13 @@ public class InGameData : MonoBehaviour
         Debug.Log("loss " + lossesValue);
 
     }
- 
+
+    public async void AddFriend()
+    {
+        var id = new[] { PassData.OtherUserId };
+        await PassData.iClient.AddFriendsAsync(PassData.isession, id);
+        Debug.Log(" you added " + PassData.OtherUserId);
+
+    }
+
 }

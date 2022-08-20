@@ -45,7 +45,9 @@ public class FacebookLogin : MonoBehaviour
     {
         var aToken = Facebook.Unity.AccessToken.CurrentAccessToken.TokenString;
         isession = await iclient.AuthenticateFacebookAsync(aToken);
-        isocket = iclient.NewSocket();
+
+        var keepAliveIntervalSec = 30;
+        isocket = Socket.From(iclient, new WebSocketAdapter(keepAliveIntervalSec));
         await isocket.ConnectAsync(isession, true);
          
         Debug.Log("Login with facebook was successful");
@@ -56,7 +58,7 @@ public class FacebookLogin : MonoBehaviour
      
         PassData.isocket = isocket;
         PassData.Username = user.DisplayName;
-        PassData.ImageURL = user.AvatarUrl;
+        PassData.MyURL = user.AvatarUrl;
         PassData.iClient = iclient;
         PassData.isession = isession;
 

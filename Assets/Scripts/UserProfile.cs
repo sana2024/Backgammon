@@ -25,6 +25,9 @@ public class UserProfile : MonoBehaviour
     int losses = 0;
     int walletMoney;
     int BoardPrice;
+    int OnlineCounter;
+
+ 
 
 
     //USER TEXTFRIENDS
@@ -33,12 +36,16 @@ public class UserProfile : MonoBehaviour
     [SerializeField] Text Username;
     [SerializeField] RawImage ProfileImage;
     [SerializeField] RawImage ProfilePanel;
+    [SerializeField] RawImage MatchImage;
     [SerializeField] GameObject UserPanel;
     [SerializeField] Text CoinUserPanelText;
     [SerializeField] Text CoinText;
     [SerializeField] Text WinText;
     [SerializeField] Text LossText;
-    
+    [SerializeField] Text OnlineCounterText;
+    [SerializeField] Text MatchUserName;
+ 
+    PersonData data;
  
 
     // Start is called before the first frame update
@@ -58,12 +65,47 @@ public class UserProfile : MonoBehaviour
         //AddLeaderboard();
 
           Wallet();
-
+ 
   
 
     }
 
+    public async void rpc()
+    {
+        var rpcid = "users";
+        var pokemonInfo = await client.RpcAsync(session, rpcid);
+
+        string TrimedJson = pokemonInfo.Payload.Remove(11, 1);
  
+        data = JsonUtility.FromJson<PersonData>(TrimedJson);
+
+        List<String> termsList = new List<String>();
+
+
+        foreach (var id in data.client)
+        {
+
+            termsList.Add(id.id);
+
+        }
+
+ 
+       var result = await client.GetUsersAsync(session , termsList);
+
+        List<bool> onlines = new List<bool>();
+
+        foreach ( var userId in result.Users)
+        {
+            if (userId.Online)
+            {
+               onlines.Add(userId.Online);
+            }
+
+        }
+
+        OnlineCounterText.text = onlines.Count.ToString();
+
+    }
 
 
     public async void WriteData(int levelvalue, int winsvalue , int LossValue)
@@ -188,6 +230,8 @@ public class UserProfile : MonoBehaviour
 
         ReadData();
 
+         rpc();
+
        
     }
 
@@ -200,10 +244,15 @@ public class UserProfile : MonoBehaviour
         var ids = new[] { "071bb808-118f-40e6-a1ea-744584c69c91", "09121f55-5c50-4b94-9698-dd42e5bd4f32" };
         var result = await client.GetUsersAsync(session, ids);
 
+       
+
         foreach (var u in result.Users)
         {
+            
             Debug.Log(u.Id +" "+u.Online);
             System.Console.WriteLine("User id '{0}' username '{1}'", u.Id, u.Online);
+
+          
         }
 
 
@@ -213,6 +262,7 @@ public class UserProfile : MonoBehaviour
 
         //Username
         Username.text = user.Username;
+        MatchUserName.text = user.Username;
     }
 
     public void OpenProfilePanel()
@@ -231,7 +281,7 @@ public class UserProfile : MonoBehaviour
 
         IEnumerator GetTexture()
         {
-            UnityWebRequest www = UnityWebRequestTexture.GetTexture(PassData.ImageURL);
+            UnityWebRequest www = UnityWebRequestTexture.GetTexture(PassData.MyURL);
  
             yield return www.SendWebRequest();
 
@@ -245,11 +295,30 @@ public class UserProfile : MonoBehaviour
 
                 ProfileImage.texture = myTexture;
                 ProfilePanel.texture = myTexture;
+                MatchImage.texture = myTexture;
             }
 
         }
 
-
+    [System.Serializable]
+    public class Person
+    {
+        public string id;
+   
+        public Person(string _id)
+        {
+            id = _id;
+ 
+        }
     }
+
+    [System.Serializable]
+    public class PersonData
+    {
+        public List<Person> client;
+    }
+
+
+}
 
 

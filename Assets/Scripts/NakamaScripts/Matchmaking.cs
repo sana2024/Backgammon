@@ -6,6 +6,9 @@ using System;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using UnityEngine.UI;
+using System.Threading.Tasks;
+using Nakama.TinyJson;
+using UnityEngine.Networking;
 
 public class Matchmaking : MonoBehaviour
 {
@@ -25,18 +28,79 @@ public class Matchmaking : MonoBehaviour
     [SerializeField] GameObject SearchingPanel;
     [SerializeField] UserProfile userProfile;
     [SerializeField] GameObject NoEnoughCoinPanel;
+    [SerializeField] GameObject RejectPanel;
+    [SerializeField] RawImage OpponentImage;
+    [SerializeField] Text OponentUsername;
+    [SerializeField] GameObject ProgressBar;
+    [SerializeField] GameObject HiddenUser;
+    [SerializeField] GameObject PlayButton;
+    [SerializeField] Button CancleButton;
+ 
+
 
 
     // Start is called before the first frame update
     public async void Start()
     {
-        
-
+        isession = PassData.isession;
+        iclient = PassData.iClient;
         isocket = PassData.isocket;
         var mainThread = UnityMainThreadDispatcher.Instance();
         isocket.ReceivedMatchmakerMatched += match => mainThread.Enqueue(() => OnREceivedMatchmakerMatched(match));
         isocket.ReceivedMatchPresence += m => mainThread.Enqueue(() => OnRecivedMatchPresence(m ));
+        isocket.ReceivedMatchState += m => mainThread.Enqueue(async () => await OnReceivedMatchState(m));
 
+
+        CancleButton.onClick.AddListener(RemoveTicket);
+
+    }
+
+    public async void SendMatchState(long opCode, string state)
+    {
+        await isocket.SendMatchStateAsync(PassData.Match.Id, opCode, state);
+    }
+
+    private async Task OnReceivedMatchState(IMatchState matchState)
+    {
+        var state = matchState.State.Length > 0 ? System.Text.Encoding.UTF8.GetString(matchState.State).FromJson<Dictionary<string, string>>() : null;
+
+        switch (matchState.OpCode)
+        {
+            case 16:
+
+                if (state["Leave"] == "Left")
+                {
+                    SearchingPanel.SetActive(false);
+                    StartCoroutine(DisplayRejectPanel());
+                    await PassData.isocket.LeaveMatchAsync(PassData.Match.Id);
+
+
+                    HiddenUser.SetActive(true);
+                    ProgressBar.SetActive(true);
+                    StartCoroutine(GetTexture(""));
+                    PlayButton.SetActive(false);
+                    SearchingPanel.SetActive(false);
+                }
+
+
+                if (state["Leave"] == "Join")
+                {
+                    PassData.JoinedPlayers = 2;
+                    Debug.Log("other player joined");
+                }
+
+
+                break;
+
+        }
+        }
+
+
+    IEnumerator DisplayRejectPanel()
+    {
+        RejectPanel.SetActive(true);
+        yield return new WaitForSeconds(3);
+        RejectPanel.SetActive(false);
     }
 
     public async void FindMatch(string BoardName)
@@ -62,6 +126,10 @@ public class Matchmaking : MonoBehaviour
 
         ticket = matchmakingTickets.Ticket;
 
+ 
+
+ 
+
         }
         else
         {
@@ -81,10 +149,13 @@ public class Matchmaking : MonoBehaviour
  
     public async void RemoveTicket()
     {
- 
+        Debug.Log(ticket);
         await isocket.RemoveMatchmakerAsync(ticket);
         SearchingPanel.SetActive(false);
-        
+
+        int boardPrice = Math.Abs(PassData.BoardPrice);
+        userProfile.updateWallet(boardPrice);
+
     }
 
     private async void OnREceivedMatchmakerMatched(IMatchmakerMatched matchmakerMatched)
@@ -107,10 +178,9 @@ public class Matchmaking : MonoBehaviour
         }
 
 
-
         var match = await isocket.JoinMatchAsync(matchmakerMatched);
 
-        
+ 
 
         hostPresence = matchmakerMatched.Users.OrderBy(x => x.Presence.SessionId).First().Presence;
         SecondPresence = matchmakerMatched.Users.OrderBy(x => x.Presence.SessionId).Last().Presence;
@@ -128,16 +198,24 @@ public class Matchmaking : MonoBehaviour
         {
             Debug.Log("we Joined A match");
 
-           
-
-            SceneManager.LoadScene("GameScene");
-
+            CancleButton.onClick.AddListener(RejectGame);
 
             if (presence.UserId != match.Self.UserId)
             {
                 PassData.OtherUserId = presence.UserId;
                 PassData.otherUsername = presence.Username;
-                
+ 
+
+                var ids = new[] { presence.UserId };
+                var result = await iclient.GetUsersAsync(isession,  ids);
+
+                foreach ( var u in result.Users)
+                {
+                    PassData.OpponentURL = u.AvatarUrl;
+                    StartCoroutine(GetTexture(u.AvatarUrl));
+                    OponentUsername.text = u.Username;
+                }
+
             }
 
 
@@ -145,13 +223,14 @@ public class Matchmaking : MonoBehaviour
 
     }
 
-    private void OnRecivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
+    private async void OnRecivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
     {
         foreach (var user in matchPresenceEvent.Joins)
         {
-           
-   
-            SceneManager.LoadScene("GameScene");
+
+            CancleButton.onClick.AddListener(RejectGame);
+
+            Debug.Log("Match Found");
  
             var UserId = PlayerPrefs.GetString("MatchSelf");
 
@@ -159,6 +238,17 @@ public class Matchmaking : MonoBehaviour
             {
                 PassData.OtherUserId = user.UserId;
                 PassData.otherUsername = user.Username;
+
+                var ids = new[] { user.UserId };
+                var result = await iclient.GetUsersAsync(isession, ids);
+
+                foreach (var u in result.Users)
+                {
+                    PassData.OpponentURL = u.AvatarUrl;
+                    StartCoroutine(GetTexture(u.AvatarUrl));
+                    OponentUsername.text = u.Username;
+                }
+
             }
 
 
@@ -167,7 +257,58 @@ public class Matchmaking : MonoBehaviour
         }
 
     }
+
+    public void AcceptGame()
+    {
+        var state = MatchDataJson.SetLeaveMatch("Join");
+        SendMatchState(OpCodes.Reject_Match, state);
+        SceneManager.LoadScene("GameScene");
+
+    }
+
+
+    public async void RejectGame()
+    {
+
+
+        var state = MatchDataJson.SetLeaveMatch("Left");
+        SendMatchState(OpCodes.Reject_Match, state);
+
+        await PassData.isocket.LeaveMatchAsync(PassData.Match.Id);
  
+
+        HiddenUser.SetActive(true);
+        ProgressBar.SetActive(true);
+        StartCoroutine(GetTexture(""));
+        PlayButton.SetActive(false);
+        SearchingPanel.SetActive(false);
+ 
+    }
+
+
+    IEnumerator GetTexture(string url)
+    {
+        UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
+
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            Texture myTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+
+            OpponentImage.texture = myTexture;
+ 
+        }
+
+    }
+
+
+
+
 
 
 

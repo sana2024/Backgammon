@@ -88,7 +88,9 @@ public class NakamaLogin : MonoBehaviour
             diceVideo.Play();
             isession = await iclient.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier, create: true);
             isession = await iclient.SessionRefreshAsync(isession);
-            isocket = iclient.NewSocket();
+
+            var keepAliveIntervalSec = 30;
+            isocket = Socket.From(iclient, new WebSocketAdapter(keepAliveIntervalSec));
             await isocket.ConnectAsync(isession, true);
 
 
@@ -102,7 +104,7 @@ public class NakamaLogin : MonoBehaviour
 
                 PassData.isocket = isocket;
                 PassData.Username = username;
-                PassData.ImageURL = avatarUrl;
+                PassData.MyURL = avatarUrl;
                 PassData.iClient = iclient;
                 PassData.isession = isession;
             }
@@ -117,7 +119,7 @@ public class NakamaLogin : MonoBehaviour
 
                 PassData.isocket = isocket;
                 PassData.Username = username;
-                PassData.ImageURL = avatarUrl;
+                PassData.MyURL = avatarUrl;
                 PassData.iClient = iclient;
                 PassData.isession = isession;
             }
