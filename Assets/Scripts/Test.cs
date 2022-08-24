@@ -18,6 +18,8 @@ public class Test : MonoBehaviour
 
     float amount = 2;
 
+
+
     
 
  
@@ -26,19 +28,14 @@ public class Test : MonoBehaviour
     public bool controller=false;
  
 
-   public List<Piece> Circles = new List<Piece>();
+   public List<GameObject> Circles = new List<GameObject>();
 
-    [SerializeField] Piece piece;
+    [SerializeField] GameObject piece;
 
 
     public void Start()
     {
-        bool s = true;
 
-        Debug.Log(s.ToString());
-
-        SpawnList();
- 
     }
 
     public void Update()
@@ -46,74 +43,35 @@ public class Test : MonoBehaviour
  
     }
 
-    IEnumerator checkInternetConnection()
-    {
-
-        UnityWebRequest request = new UnityWebRequest("http://google.com");
-        yield return request.SendWebRequest();
-
-        if(request.error != null)
-        {
-           
-        }
-    }
-
-
+ 
 
     // Start is called before the first frame update
     public void onclick()
     {
         Vector2 v = new Vector2(0, -3);
-        Piece ob = Instantiate(piece, v, Quaternion.identity);
+        GameObject ob = Instantiate(piece, v, Quaternion.identity);
         j++;
         c.name = "checker "+j;
         Circles.Add(ob);
- 
 
          i += 0.7f;
 
         Debug.Log(i);
 
-       Circles.LastOrDefault().transform.position = new Vector2(Circles.LastOrDefault().transform.position.x, Circles.LastOrDefault().transform.position.y + i);
+       Circles.Last().transform.position = new Vector2(Circles.Last().transform.position.x, Circles.Last().transform.position.y + i);
  
     }
 
     public void OnRemove()
     {
-        Circles.Remove(Circles.LastOrDefault());
+        i -= 0.7f;
+        DestroyObject(Circles.LastOrDefault().gameObject);
+        Circles.Remove(Circles.Last());
+
+        
 
     }
-
-    public void dissable()
-    {
-        controller = !controller;
-        img.SetActive(controller);
-    }
-
-
-
  
-    public void SpawnList()
-    {
-  
-        string[] a = { "a", "b", "c" };
-
-        foreach(var index in a)
-        {
-         GameObject f=  Instantiate(Friend, Vector3.zero, Quaternion.identity) as GameObject;
-            f.transform.parent = FriendHolderUI.transform;
-        }
-
-    }
-
-
-    public void onTestClicked()
-    {
-        amount *= 2;
-        Debug.Log(amount);
-     
  
-    }
-
 
     }

@@ -160,5 +160,19 @@ public class MatchDataJson
     }
 
 
+    public static string SetDiceCanvar(string diceColor, string diceValue1 , string diceValue2)
+    {
+        var values = new Dictionary<string, string>
+        {
+            { "DiceColor" , diceColor.ToString()},
+            { "DiceValue1" , diceValue1.ToString()},
+            { "DiceValue2" , diceValue2.ToString()}
+
+        };
+
+        return values.ToJson();
+    }
+
+
 
 }

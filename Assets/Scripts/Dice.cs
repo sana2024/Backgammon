@@ -28,11 +28,13 @@ public class Dice : MonoBehaviour, IThrowable
     private float changeSpriteTime = CHANGE_SPRITE_TIME;
     private bool changeSprite = false;
 
-    private int value = 0;
+    public int value = 0;
 
     private ISocket isocket;
 
     public int DiceID;
+
+    public string DiceColor;
 
     private bool AnimationStarted
     {

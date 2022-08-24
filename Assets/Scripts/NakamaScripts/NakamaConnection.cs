@@ -19,8 +19,13 @@ public class NakamaConnection : ScriptableObject
     {
 
         iclient = new Client(scheme, host, port, serverKey, UnityWebRequestAdapter.Instance);
-        iclient.Timeout = 5;
- 
+
+        var logger = new Nakama.UnityLogger(); // Implements Nakama.ILogger
+        
+
+
+
+
         return iclient;
     }
 

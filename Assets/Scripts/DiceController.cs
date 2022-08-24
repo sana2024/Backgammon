@@ -5,6 +5,7 @@ using UnityEngine;
 using Nakama;
 using Nakama.TinyJson;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(GameManager))]
 public class DiceController : MonoBehaviour
@@ -26,12 +27,18 @@ public class DiceController : MonoBehaviour
     [HideInInspector]
     public Sprite secondValueSprite;
 
+    [SerializeField] Image DiceImage1;
+    [SerializeField] Image DiceImage2;
+
     // 2 white and 2 black dices
     private Dice[] dices = new Dice[4];
     private IEnumerable<Dice> rollingDices = null;
     public bool animationStarted = false;
     public bool animationFinished = false;
     public int[] values = new int[2];
+
+    [SerializeField] Sprite[] BlackCanvasDice;
+    [SerializeField] Sprite[] WhiteCanvasDice;
 
     ISocket isocket;
 
@@ -81,8 +88,10 @@ public class DiceController : MonoBehaviour
                 Debug.Log(rollingDices.First());
                 Debug.Log(rollingDices.Last());
 
-                
-                 foreach (var dice in rollingDices)
+ 
+
+
+                foreach (var dice in rollingDices)
                  {
                      if(dice != null)
                     {
@@ -92,7 +101,7 @@ public class DiceController : MonoBehaviour
 
                  }
 
-                await Task.Delay(9000);
+                await Task.Delay(5000);
 
                 foreach (var dice in rollingDices)
                 {
@@ -113,6 +122,30 @@ public class DiceController : MonoBehaviour
 
                 ThrowDicesRecive(state);
 
+                break;
+
+
+            case 17:
+                
+
+                int dice1 = int.Parse(state["DiceValue1"]);
+                int dice2 = int.Parse(state["DiceValue2"]);
+
+                if (state["DiceColor"] == "white")
+                {
+                    DiceImage1.sprite = WhiteCanvasDice[dice1-1];
+                    DiceImage2.sprite = WhiteCanvasDice[dice2 - 1];
+                }
+
+                if (state["DiceColor"] == "black")
+                {
+                    DiceImage1.sprite = BlackCanvasDice[dice1-1];
+                    DiceImage2.sprite = BlackCanvasDice[dice2 - 1];
+                }
+
+
+
+                
                 break;
         }
 
@@ -136,6 +169,11 @@ public class DiceController : MonoBehaviour
 
         firstValueSprite = firstDice.GetComponent<SpriteRenderer>().sprite;
         secondValueSprite = secondDice.GetComponent<SpriteRenderer>().sprite;
+
+        var State = MatchDataJson.SetDiceCanvar(firstDice.DiceColor , firstDice.value.ToString() , secondDice.value.ToString());
+        SendMatchState(OpCodes.Dice_Canvas, State);
+
+
 
         animationFinished = true;
         foreach (var dice in rollingDices)
@@ -179,7 +217,7 @@ public class DiceController : MonoBehaviour
         var throwLocation = GetThrowLocation();
         var direction = throwLocation.direction;
         var pos = throwLocation.transform.position;
-        var speed = 5f;
+        var speed = 3f;
 
         Roll();
 
@@ -190,8 +228,8 @@ public class DiceController : MonoBehaviour
         var secondDice = rollingDices.Last();
 
         // set direction
-        firstDice.direction = new Vector2(direction.x, direction.y -0.15f);
-        secondDice.direction = new Vector2(direction.x + .25f, direction.y + 0.15f);
+        firstDice.direction = new Vector2(direction.x, direction.y);
+        secondDice.direction = new Vector2(direction.x + .25f, direction.y);
 
         // set move speed
         firstDice.moveSpeed = speed;
@@ -213,16 +251,16 @@ public class DiceController : MonoBehaviour
     public void ThrowDicesRecive(IDictionary <string, string> state)
     {
         var throwLocation = GetThrowLocation();
-        var direction = -throwLocation.direction;
-        var pos = new Vector3(float.Parse(state["Pos_X"]), float.Parse(state["Pos_Y"]));
+        var direction = throwLocation.direction;
+        var pos = throwLocation.transform.position;
         var speed = 5f;
  
         var firstDice = rollingDices.First();
         var secondDice = rollingDices.Last();
 
         // set direction
-        firstDice.direction = new Vector2(direction.x, direction.y - 0.15f);
-        secondDice.direction = new Vector2(direction.x + .25f, direction.y + 0.15f);
+        firstDice.direction = new Vector2(direction.x, direction.y);
+        secondDice.direction = new Vector2(direction.x + .25f, direction.y);
 
         // set move speed
         firstDice.moveSpeed = speed;
@@ -230,10 +268,24 @@ public class DiceController : MonoBehaviour
 
         if(firstDice.body2D != null && secondDice.body2D != null)
         {
-        // throw from position
+ 
+            //rotation
+            Vector3 randomRotation = new Vector3(Random.Range(30f, 60f), 0, 0);
+            firstDice.body2D.AddTorque(4 );
+            secondDice.body2D.AddTorque(3);
 
-        firstDice.body2D.velocity = pos;
-        secondDice.body2D.velocity = pos + Vector3.up * (direction.y > 0 ? 1 : -1);
+            //position
+            firstDice.body2D.position = new Vector3(pos.x -0.5f, pos.y, 0);
+            secondDice.body2D.position = new Vector3(pos.x +0.5f, pos.y, 0);
+
+            //velocity
+            var VelocityPos = new Vector3(0f, 9f, 0);
+            firstDice.body2D.velocity = VelocityPos ;
+            secondDice.body2D.velocity = VelocityPos;
+
+
+
+
         }
 
  
@@ -250,13 +302,15 @@ public class DiceController : MonoBehaviour
     private void InitializeDices()
     {
         int index = 0;
-        Vector2 postion = new Vector2(2.85f,3);
+        Vector2 postion = new Vector2(2.85f,-3.32f);
 
         // instantiate 2 white dices
         for (int i = 0; i < 2; i++, index++)
         {
             dices[index] = Instantiate(whiteDicePrefab, postion, Quaternion.identity);
             dices[index].DiceID = index + 1;
+            dices[index].DiceID = index - 1;
+            dices[index].DiceColor = "white";
         }
 
         // instantiate 2 black dices
@@ -264,7 +318,7 @@ public class DiceController : MonoBehaviour
         {
             dices[index] = Instantiate(blackDicePrefab, postion, Quaternion.identity);
             dices[index].DiceID = index - 1;
-
+            dices[index].DiceColor = "black";
         }
 
         foreach (var dice in dices)

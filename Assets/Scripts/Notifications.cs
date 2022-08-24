@@ -1,9 +1,11 @@
+ 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Nakama;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+ 
 
 public class Notifications : MonoBehaviour
 {
@@ -18,6 +20,11 @@ public class Notifications : MonoBehaviour
     [SerializeField] GameObject notificationPrefab;
     [SerializeField]  Transform notificationParent;
     [SerializeField] FriendSystem friendsSystem;
+
+#if UNITY_IOS
+    [SerializeField] mobileNotificationIos IosNotification;
+
+#endif
 
 
     int NotificationAmount = 0;
@@ -38,16 +45,29 @@ public class Notifications : MonoBehaviour
 
  
     }
+    public void Update()
+    {
+ 
+
+
+      
+    }
 
 
     private void onRecivedNotification(IApiNotification notification)
     {
+        Application.runInBackground = true;
         switch (notification.Code)
         {
             case -2: 
  
                 NotificationAmount++;
                 NotificationAmountText.text = NotificationAmount.ToString();
+
+#if UNITY_IOS
+                IosNotification.OnClick("Friend Request" , notification.Subject);
+
+#endif
  
                 break;
 

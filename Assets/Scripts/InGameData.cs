@@ -130,6 +130,8 @@ public class InGameData : MonoBehaviour
         Debug.Log("wins " + winsvalue);
         Debug.Log("loss " + lossesValue);
 
+        AddLeaderboard(winsvalue);
+
     }
 
     public async void AddFriend()
@@ -137,6 +139,15 @@ public class InGameData : MonoBehaviour
         var id = new[] { PassData.OtherUserId };
         await PassData.iClient.AddFriendsAsync(PassData.isession, id);
         Debug.Log(" you added " + PassData.OtherUserId);
+
+    }
+
+    public async void AddLeaderboard(long wins)
+    {
+        const string leaderboardId = "level1";
+        long score = wins;
+        var r = await client.WriteLeaderboardRecordAsync(session, leaderboardId, score);
+        System.Console.WriteLine("New record for '{0}' score '{1}'", r.Username, r.Score);
 
     }
 

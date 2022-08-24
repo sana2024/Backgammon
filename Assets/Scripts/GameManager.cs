@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public Player currentPlayer;
     public Player turnPlayer;
     public Player playerWonRound;
+    public Player MyPlayer;
 
 
     //-----------------
@@ -76,6 +77,8 @@ public class GameManager : MonoBehaviour
 
  
 
+ 
+
     //Others
     int RollCounters = 1;
 
@@ -100,7 +103,12 @@ public class GameManager : MonoBehaviour
         if(PassData.Match.Self.UserId == playerBlack.UserId)
         {
             resizeSlots.rotate();
+            MyPlayer = playerBlack;
 
+        }
+        if (PassData.Match.Self.UserId == playerWhite.UserId)
+        {
+            MyPlayer = playerWhite;
         }
 
  
@@ -109,6 +117,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
+        Debug.Log("my player" + MyPlayer.pieceType);
 
 
         isocket = PassData.isocket;
@@ -152,6 +162,13 @@ public class GameManager : MonoBehaviour
 
         switch (matchState.OpCode)
         {
+            case 5:
+
+           ShowDiceValues();
+
+
+                break;
+
             case 6:
 
                  buttonController.EnableRollButton();
@@ -216,8 +233,10 @@ public class GameManager : MonoBehaviour
 
                 var lastMove = currentPlayer.movesPlayed.Last();
 
-                
-                    ConvertPieceOutside.instance.FromOutToSlot(lastMove.piece);
+                var PieceSprite = lastMove.piece.gameObject.GetComponent<SpriteRenderer>();
+
+
+                ConvertPieceOutside.instance.FromOutToSlot(lastMove.piece);
                      piece.IncreaseColliderRadius();
                 
 
@@ -233,7 +252,14 @@ public class GameManager : MonoBehaviour
 
                 currentPlayer.movesPlayed.Remove(lastMove);
 
-                
+                if (lastMove.piece.pieceType == PieceType.Black)
+                {
+                    PieceSprite.sprite = BlackChecker;
+                }
+                if (lastMove.piece.pieceType == PieceType.White)
+                {
+                    PieceSprite.sprite = WhiteChecker;
+                }
 
 
                 break;
@@ -425,26 +451,7 @@ public class GameManager : MonoBehaviour
         NextTurn();
     }
 
-    private void OnNextRoundButtonClick()
-    {
-        if (IsAnyPlayerWon())
-            SceneManager.LoadScene(Constants.SCENE_WHO_IS_FIRST);
-
-        // increment current round
-        currentRound++;
-
-        // reset players
-        Player.ResetForNextRound(playerWhite);
-        Player.ResetForNextRound(playerBlack);
-
-        // who wins the round starts first
-        turnPlayer = playerWonRound;
-        playerWonRound = null;
-        currentPlayer = turnPlayer;
-
-        RestartBoard();
-        HideGameEndScreen();
-    }
+ 
 
     private void UpdateGameEndScreen()
     {
@@ -558,10 +565,11 @@ public class GameManager : MonoBehaviour
         firstDiceValueImage.sprite = DiceController.instance.firstValueSprite;
         secondDiceValueImage.sprite = DiceController.instance.secondValueSprite;
 
- 
-
+       
 
     }
+
+
 
     #endregion
 
@@ -719,6 +727,8 @@ public class GameManager : MonoBehaviour
         // undo move action
         lastMove.piece.PlaceOn(lastMove.from);
 
+ 
+
         Debug.Log(lastMove.from.ToString());
         var state = MatchDataJson.SetPieceStack(lastMove.piece.name, lastMove.from.name, lastMove.to.name, lastMove.step.ToString() , lastMove.action.ToString());
         SendMatchState(OpCodes.undo ,state);
@@ -732,13 +742,13 @@ public class GameManager : MonoBehaviour
         }
 
         //undo bear action
-       
-           ConvertPieceOutside.instance.FromOutToSlot(lastMove.piece);
-            lastMove.piece.IncreaseColliderRadius();
-
- 
-
+        lastMove.piece.index -= 0.15f;
 
         currentPlayer.movesPlayed.Remove(lastMove);
+
+        ConvertPieceOutside.instance.FromOutToSlot(lastMove.piece);
+        lastMove.piece.IncreaseColliderRadius();
+
     }
+ 
 }

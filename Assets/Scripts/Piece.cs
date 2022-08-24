@@ -14,7 +14,10 @@ public class Piece : MonoBehaviour
     //----------------------------
     public int pieceId;
     public PieceType pieceType;
+    [SerializeField] Sprite OutsideBlack;
+    [SerializeField] Sprite OutsideWhite;
 
+    public List<Piece> Circles = new List<Piece>();
 
     //----------------------------
     //  Class Instance
@@ -65,7 +68,7 @@ public class Piece : MonoBehaviour
     GameObject SlotPos;
     Slot undoSlot;
 
-    float index;
+    public float index;
 
 
 
@@ -556,23 +559,29 @@ public class Piece : MonoBehaviour
         // move yourself to outside
         if ((action & MoveActionTypes.Bear) == MoveActionTypes.Bear)
         {
-
  
-
             ConvertPieceOutside.instance.FromSlotToOut(this);
 
             var slotOutside = Slot.GetOutside(pieceType).GetComponent<Slot>();
 
-            if (slotOutside.pieces.LastOrDefault() != null)
-            {
-
-                index += 0.15f;
-                slotOutside.pieces.LastOrDefault().transform.position = new Vector2(slotOutside.pieces.LastOrDefault().transform.position.x, slotOutside.pieces.LastOrDefault().transform.position.y + index);
- 
-
-            }
+             index += 0.15f;
 
             PlaceOn(slotOutside);
+
+           foreach( var piece in slotOutside.pieces)
+            {
+                  if (slotOutside.pieces.LastOrDefault() != null)
+                 {
+ 
+                    ConvertPieceOutside.instance.FromSlotToOut(this);
+                    this.transform.position = new Vector2(this.transform.position.x,this.transform.position.y + index);
+                    DecreaseColliderRadius();
+
+
+            }
+            }
+
+            
 
             // check round finish
             GameManager.instance.CheckRoundFinish();
@@ -612,8 +621,7 @@ public class Piece : MonoBehaviour
             var slotOutside = Slot.GetOutside(pieceType);
 
             index += 0.15f;
-            slotOutside.pieces.Last().transform.position = new Vector2(slotOutside.pieces.Last().transform.position.x, slotOutside.pieces.Last().transform.position.y + index);
-
+ 
             PlaceOn(slotOutside);
 
             // check round finish

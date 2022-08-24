@@ -62,7 +62,7 @@ public class UserProfile : MonoBehaviour
 
         getUserProfile();
 
-        //AddLeaderboard();
+ 
 
           Wallet();
  
@@ -212,13 +212,7 @@ public class UserProfile : MonoBehaviour
 
     }
 
-    public async void AddLeaderboard()
-    {
-        const string leaderboardId = "level1";
-        const long score = 200L;
-        var r = await client.WriteLeaderboardRecordAsync(session, leaderboardId, score);
-        System.Console.WriteLine("New record for '{0}' score '{1}'", r.Username, r.Score);
-    }
+ 
 
 
 
@@ -230,7 +224,7 @@ public class UserProfile : MonoBehaviour
 
         ReadData();
 
-         rpc();
+ 
 
        
     }

@@ -89,9 +89,9 @@ public class NakamaLogin : MonoBehaviour
             isession = await iclient.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier, create: true);
             isession = await iclient.SessionRefreshAsync(isession);
 
-            var keepAliveIntervalSec = 30;
+            var keepAliveIntervalSec = 10;
             isocket = Socket.From(iclient, new WebSocketAdapter(keepAliveIntervalSec));
-            await isocket.ConnectAsync(isession, true);
+            await isocket.ConnectAsync(isession, true , keepAliveIntervalSec);
 
 
 

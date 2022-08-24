@@ -136,4 +136,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieceId: 0
   pieceType: 0
+  OutsideBlack: {fileID: 21300000, guid: cbf0a1302d6264a37be3ec405f0a20d2, type: 3}
+  OutsideWhite: {fileID: 21300000, guid: e232e9ba6890945ff86ad0f924d32ede, type: 3}
   currentSlot: {fileID: 0}
