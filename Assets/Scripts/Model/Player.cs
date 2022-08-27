@@ -31,7 +31,9 @@ public class Player
         return true;
     }
 
-    private bool IsPlayableMoveExist()
+ 
+
+    public bool IsPlayableMoveExist()
     {
         // current dice of player
         var diceController = DiceController.instance;
@@ -52,6 +54,7 @@ public class Player
             {
                 foreach (var slot in piece.GetForwardSlots())
                 {
+                    
                     MoveActionTypes action;
                     var error = Rule.ValidateMove(piece, slot, step, out action);
 

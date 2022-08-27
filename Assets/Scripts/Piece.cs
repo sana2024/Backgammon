@@ -70,7 +70,9 @@ public class Piece : MonoBehaviour
 
     public float index;
 
- 
+    float posY = 0;
+
+
 
 
     //----------------------------
@@ -83,7 +85,7 @@ public class Piece : MonoBehaviour
 
     private void Awake()
     {
-
+ 
         if(instance == null)
         {
             instance = this;        }
@@ -97,12 +99,24 @@ public class Piece : MonoBehaviour
 
     private void Start()
     {
+ 
+ 
+
+        Debug.Log("piece postion" + this.Position);
         isocket = PassData.isocket;
         var mainThread = UnityMainThreadDispatcher.Instance();
         isocket.ReceivedMatchState += m => mainThread.Enqueue(async () => await OnReceivedMatchState(m));
 
 
     }
+
+    public bool IsTop()
+    {
+        var top = Slot.IsTopPiece(this.currentSlot, this);
+
+        return top;
+    }
+
     public async void SendMatchState(long opCode, string state)
     {
         await isocket.SendMatchStateAsync(PassData.Match.Id, opCode, state);
@@ -251,6 +265,8 @@ public class Piece : MonoBehaviour
                 return .7f;
             case SlotType.Bar:
                 return .1f;
+            case SlotType.Outside:
+                return .05f;
         };
         return 0f;
     }
@@ -262,23 +278,26 @@ public class Piece : MonoBehaviour
         //-------------------------------------------------
         // calculate offset of y value
         //-------------------------------------------------
-        float posY = slot.pieces.Count * GetOffsetMultiplier(slot.slotType);
+ 
 
         // if piece reached the last slot length
 
-        
-        if(slot.pieces.Count >= 6)
+ 
+        if (slot.pieces.Count > 5 && slot.slotType != SlotType.Outside)
         {
-            posY = 0.4f;
-
+            posY = 0.3f;
+            posY += (slot.pieces.Count-6) * GetOffsetMultiplier(slot.slotType);
+        }
+        else
+        {
+            posY = slot.pieces.Count * GetOffsetMultiplier(slot.slotType);
         }
 
- 
 
 
         // if slot is on top region
         if (slot.slotId >= 13 && slot.slotId <= 24 || 
-            (slot.slotType == SlotType.Bar && pieceType == PieceType.Black))
+            (slot.slotType == SlotType.Bar && pieceType == PieceType.Black) || (slot.slotType == SlotType.Outside && pieceType == PieceType.Black))
             posY *= -1;
 
         //-------------------------------------------------
@@ -589,19 +608,21 @@ public class Piece : MonoBehaviour
 
             PlaceOn(slotOutside);
 
+          /*  
            foreach( var piece in slotOutside.pieces)
             {
                   if (slotOutside.pieces.LastOrDefault() != null)
                  {
  
-                    ConvertPieceOutside.instance.FromSlotToOut(this);
                     this.transform.position = new Vector2(this.transform.position.x,this.transform.position.y + index);
                     DecreaseColliderRadius();
 
 
             }
-            }
 
+           
+            }
+ */
             
 
             // check round finish

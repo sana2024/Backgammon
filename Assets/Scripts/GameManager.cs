@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject RejectBetPanel;
     [SerializeField] GameObject RejectGamePanel;
+    [SerializeField] GameObject NoMoveExistsPanel;
 
  
 
@@ -366,6 +367,8 @@ public class GameManager : MonoBehaviour
 
     }
 
+    // enumerator functions 
+
     IEnumerator ShowAcceptPanel()
     {
         AcceptedPanel.SetActive(true);
@@ -387,6 +390,13 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3);
         VideoAgora.OnApplicationQuit();
         SceneManager.LoadScene("Menu");
+    }
+
+    IEnumerator ShowNoMovePanel()
+    {
+        NoMoveExistsPanel.SetActive(true);
+        yield return new WaitForSeconds(3);
+        NoMoveExistsPanel.SetActive(false);
     }
 
 
@@ -541,7 +551,23 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator AfterRolledDice()
     {
+       var pices = BoardManager.instance.GetAllPiecesByType(currentPlayer.pieceType);
+
+        foreach(var piece in pices)
+        {
+            if (piece.IsTop())
+            {
+               var pieceSprite= piece.GetComponent<SpriteRenderer>();
+                pieceSprite.color = Color.red;
+            }
+        }
+
         nextTurnButton.interactable = false;
+
+        if (!currentPlayer.IsPlayableMoveExist())
+        {
+            StartCoroutine(ShowNoMovePanel());
+        }
         
         yield return new WaitForSeconds(2f);
         if (!currentPlayer.IsMoveLeft())
@@ -764,6 +790,8 @@ public class GameManager : MonoBehaviour
 
         //undo bear action
         lastMove.piece.index -= 0.15f;
+
+ 
 
         currentPlayer.movesPlayed.Remove(lastMove);
 
