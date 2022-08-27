@@ -28,10 +28,10 @@ public class GameManager : MonoBehaviour
     //-----------------
     //UI elements
     //-----------------
-    public Button undoButton;
+    public Button undoButton;   
     public Button nextTurnButton;
     public Button rollButton;
-    public Image firstDiceValueImage;
+    public Image  firstDiceValueImage;
     public Image secondDiceValueImage;
     [SerializeField] ButtonController buttonController;
     public GameObject gameEndScreen;
@@ -87,6 +87,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+
+      
         if (instance == null)
             instance = this;
 
@@ -94,7 +96,7 @@ public class GameManager : MonoBehaviour
         playerBlack = new Player { id = 1, pieceType = PieceType.Black , UserId = PassData.SecondPresence.UserId };
        
 
-//        gameEndScreen.transform.Find(UI_BUTTON_NEXT_ROUND).GetComponent<Button>().onClick.AddListener(OnNextRoundButtonClick);
+ 
         nextTurnButton.onClick.AddListener(OnNextTurnButtonClick);
         undoButton.onClick.AddListener(UndoPiece);
         rollButton.onClick.AddListener(RollDices);
@@ -110,9 +112,10 @@ public class GameManager : MonoBehaviour
         {
             MyPlayer = playerWhite;
         }
-
  
     }
+
+ 
 
     private void Start()
     {
@@ -447,7 +450,7 @@ public class GameManager : MonoBehaviour
         }
 
  
-        playerTimer.restart();
+     //   playerTimer.restart();
         NextTurn();
     }
 
@@ -580,10 +583,13 @@ public class GameManager : MonoBehaviour
         if (IsFinished())
         {
             var score = CalculateScore();
+            MalsUserBet();
 
             Debug.Log("score " + score);
             // increment won round of player
             playerWonRound.score += score;
+
+
 
             if (playerWonRound.UserId == PassData.Match.Self.UserId)
             {
@@ -612,6 +618,21 @@ public class GameManager : MonoBehaviour
             }
 
                 ShowGameEndScreen();
+        }
+    }
+
+
+
+
+    public void MalsUserBet()
+    {
+        var enemyOutside = (Piece.GetEnemyType(playerWonRound.pieceType) == PieceType.White) ?
+        BoardManager.instance.whiteOutside.GetComponent<Slot>() :
+        BoardManager.instance.blackOutside.GetComponent<Slot>();
+
+        if(enemyOutside.pieces.Count == 0)
+        {
+            bet.IncreaseBet();
         }
     }
 

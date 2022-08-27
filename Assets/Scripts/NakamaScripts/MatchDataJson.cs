@@ -18,13 +18,15 @@ public class MatchDataJson
     }
 
  
-    public static string SetDicePos(Vector2 pos)
+    public static string SetDicePos(Vector2 pos , int value1 , int value2)
     {
         var values = new Dictionary<string, string>
         {
             { "Pos_X", pos.x.ToString()},
-            { "Pos_Y", pos.y.ToString()}
- 
+            { "Pos_Y", pos.y.ToString()},
+            { "Value1", value1.ToString()},
+            { "Value2", value2.ToString()}
+
         };
 
         return values.ToJson();

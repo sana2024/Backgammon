@@ -43,6 +43,11 @@ public class PassData
     public static int level;
     public static string version;
     public static int JoinedPlayers;
+
+
+    //rules
+
+    public static int DoubleValue;
  
 
 }

@@ -35,14 +35,16 @@ public class DiceController : MonoBehaviour
     private IEnumerable<Dice> rollingDices = null;
     public bool animationStarted = false;
     public bool animationFinished = false;
-    public int[] values = new int[2];
+    public int[] values;
 
     [SerializeField] Sprite[] BlackCanvasDice;
     [SerializeField] Sprite[] WhiteCanvasDice;
 
     ISocket isocket;
 
-    
+ 
+
+
 
     private IEnumerable<Dice> WhiteDices
     {
@@ -119,6 +121,7 @@ public class DiceController : MonoBehaviour
 
 
             case 2:
+ 
 
                 ThrowDicesRecive(state);
 
@@ -130,6 +133,9 @@ public class DiceController : MonoBehaviour
 
                 int dice1 = int.Parse(state["DiceValue1"]);
                 int dice2 = int.Parse(state["DiceValue2"]);
+
+                values[0] = dice1;
+                values[1] = dice2;
 
                 if (state["DiceColor"] == "white")
                 {
@@ -243,12 +249,12 @@ public class DiceController : MonoBehaviour
         animationStarted = true;
         animationFinished = false;
 
-        var state = MatchDataJson.SetDicePos(pos);
+        var state = MatchDataJson.SetDicePos(pos, firstDice.value , secondDice.value );
         SendMatchState(OpCodes.throw_Loc, state);
     }
 
 
-    public void ThrowDicesRecive(IDictionary <string, string> state)
+    public void ThrowDicesRecive(IDictionary <string, string> state )
     {
         var throwLocation = GetThrowLocation();
         var direction = throwLocation.direction;
@@ -266,12 +272,14 @@ public class DiceController : MonoBehaviour
         firstDice.moveSpeed = speed;
         secondDice.moveSpeed = speed + Random.Range(.75f, 3f);
 
+ 
+
         if(firstDice.body2D != null && secondDice.body2D != null)
         {
  
             //rotation
             Vector3 randomRotation = new Vector3(Random.Range(30f, 60f), 0, 0);
-            firstDice.body2D.AddTorque(4 );
+            firstDice.body2D.AddTorque(4);
             secondDice.body2D.AddTorque(3);
 
             //position

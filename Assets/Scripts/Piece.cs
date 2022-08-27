@@ -70,7 +70,7 @@ public class Piece : MonoBehaviour
 
     public float index;
 
-
+ 
 
 
     //----------------------------
@@ -90,8 +90,8 @@ public class Piece : MonoBehaviour
 
         circleCollider2D = GetComponent<CircleCollider2D>();
 
-     
-    
+ 
+         
 
     }
 
@@ -263,6 +263,19 @@ public class Piece : MonoBehaviour
         // calculate offset of y value
         //-------------------------------------------------
         float posY = slot.pieces.Count * GetOffsetMultiplier(slot.slotType);
+
+        // if piece reached the last slot length
+
+        
+        if(slot.pieces.Count >= 6)
+        {
+            posY = 0.4f;
+
+        }
+
+ 
+
+
         // if slot is on top region
         if (slot.slotId >= 13 && slot.slotId <= 24 || 
             (slot.slotType == SlotType.Bar && pieceType == PieceType.Black))
@@ -475,49 +488,57 @@ public class Piece : MonoBehaviour
             // current player
             var currentPlayer = GameManager.instance.currentPlayer;
             // get moves left
-            var movesLeft = DiceController.instance.GetMovesLeftList(currentPlayer.movesPlayed.Select(x => x.step));
 
-            MoveActionTypes action = MoveActionTypes.Move;
-            MoveError error = MoveError.Unknown;
-            int stepPlayed = -1;
-
-            // loop through dice values
-            foreach (var step in movesLeft)
+            if (currentPlayer.UserId == PassData.Match.Self.UserId)
             {
-                stepPlayed = step;
-                error = Rule.ValidateMove(this, collisionSlot, step, out action);
+                var movesLeft = DiceController.instance.GetMovesLeftList(currentPlayer.movesPlayed.Select(x => x.step));
 
-                // if the move valid, do not continue
-                if (error == MoveError.NoError)
-                    break;
-            }
 
-            // move to place if move was valid,
-            if (error == MoveError.NoError)
-            {
-                OnSuccessfulMove(action, stepPlayed);
-            }
-            // else try combining dice values to get there
-            else
-            {
-                ICollection<Move> movesPlayed;
 
-                error = Rule.ValidateCombinedMove(this, collisionSlot, movesLeft, out movesPlayed);
+                MoveActionTypes action = MoveActionTypes.Move;
+                MoveError error = MoveError.Unknown;
+                int stepPlayed = -1;
 
-                // if there are any combined move, move
+                // loop through dice values
+                foreach (var step in movesLeft)
+                {
+                    stepPlayed = step;
+                    error = Rule.ValidateMove(this, collisionSlot, step, out action);
+
+                    // if the move valid, do not continue
+                    if (error == MoveError.NoError)
+                        break;
+                }
+
+
+
+                // move to place if move was valid,
                 if (error == MoveError.NoError)
                 {
-                    foreach (var move in movesPlayed)
-                    {
-                        OnSuccessfulMove(move.to, move.action, move.step);
-                    }
+                    OnSuccessfulMove(action, stepPlayed);
                 }
-                // roll back to the position you were before
+                // else try combining dice values to get there
                 else
                 {
-                    OnFailedMove(error);
-                }
+                    ICollection<Move> movesPlayed;
 
+                    error = Rule.ValidateCombinedMove(this, collisionSlot, movesLeft, out movesPlayed);
+
+                    // if there are any combined move, move
+                    if (error == MoveError.NoError)
+                    {
+                        foreach (var move in movesPlayed)
+                        {
+                            OnSuccessfulMove(move.to, move.action, move.step);
+                        }
+                    }
+                    // roll back to the position you were before
+                    else
+                    {
+                        OnFailedMove(error);
+                    }
+
+                }
             }
         }
 

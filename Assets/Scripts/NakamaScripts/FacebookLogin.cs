@@ -4,12 +4,15 @@ using UnityEngine;
 using Nakama;
 using Facebook.Unity;
 using UnityEngine.SceneManagement;
+using UnityEngine.Video;
 
 public class FacebookLogin : MonoBehaviour
 {
     private IClient iclient;
     private ISession isession;
     private ISocket isocket;
+    [SerializeField] GameObject LoadingPanel;
+    [SerializeField] VideoPlayer diceVideo;
 
     [SerializeField] NakamaConnection nConnect;
 
@@ -43,6 +46,9 @@ public class FacebookLogin : MonoBehaviour
 
     private async void LoginWithFacebook(ILoginResult result)
     {
+        LoadingPanel.SetActive(true);
+        diceVideo.Play();
+
         var aToken = Facebook.Unity.AccessToken.CurrentAccessToken.TokenString;
         isession = await iclient.AuthenticateFacebookAsync(aToken);
 
@@ -70,6 +76,8 @@ public class FacebookLogin : MonoBehaviour
 
         if (isocket.IsConnected)
         {
+            LoadingPanel.SetActive(false);
+            diceVideo.Stop();
             ChangeScene();
         }
 
