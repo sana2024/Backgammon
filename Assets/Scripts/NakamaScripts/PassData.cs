@@ -48,6 +48,9 @@ public class PassData
     //rules
 
     public static int DoubleValue;
- 
+
+
+    //leaderboard
+    public static string ImageURL;
 
 }

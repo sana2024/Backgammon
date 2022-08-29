@@ -85,18 +85,20 @@ public class Notifications : MonoBehaviour
 
     public async void ListNotifications()
     {
-        var result = await client.ListNotificationsAsync(session);
+            if (NotificationPanel.active)
+            {
 
         foreach (Transform item in notificationParent)
         {
             Destroy(item.gameObject);
         }
+ 
+        var result = await client.ListNotificationsAsync(session);
 
 
         foreach (var n in result.Notifications)
         {
-            if (NotificationPanel.active)
-            {
+
                 GameObject Notification = Instantiate(notificationPrefab, notificationParent);
                 Notification.transform.parent = notificationParent.transform;
                 Text Message = GameObject.Find("NotMessage").GetComponent<Text>();

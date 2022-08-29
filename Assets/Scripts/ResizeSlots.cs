@@ -27,7 +27,8 @@ public class ResizeSlots : MonoBehaviour
     public void rotate()
     {
          Boards.transform.Rotate(180, 0, 0);
-        ThrowLocation.transform.position = new Vector2(2.85f, -3);
+         ThrowLocation.transform.position = new Vector2(2.85f, -3);
+
       //  whiteSlot.transform.position = new Vector2(4.11f,-3.41f);
       //  BlackSlot.transform.position = new Vector2(5.06f, 4.46f);
 

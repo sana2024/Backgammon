@@ -460,7 +460,7 @@ public class GameManager : MonoBehaviour
         }
 
  
-     //   playerTimer.restart();
+        playerTimer.restart();
         NextTurn();
     }
 
@@ -549,18 +549,48 @@ public class GameManager : MonoBehaviour
 
               }
 
-    private IEnumerator AfterRolledDice()
+    //To show a red cyrcle around Users pieces as a hint move
+    IEnumerator ShowHintShadow()
     {
-       var pices = BoardManager.instance.GetAllPiecesByType(currentPlayer.pieceType);
+        yield return new WaitForSeconds(1.5f);
+        var pices = BoardManager.instance.GetAllPiecesByType(currentPlayer.pieceType);
 
-        foreach(var piece in pices)
+        foreach (var piece in pices)
         {
             if (piece.IsTop())
             {
-               var pieceSprite= piece.GetComponent<SpriteRenderer>();
-                pieceSprite.color = Color.red;
+                var pieceSprite = piece.GetComponent<SpriteRenderer>();
+                var HintShadow = piece.GetComponentsInChildren<SpriteRenderer>();
+                var tempColor = HintShadow[1].color;
+                tempColor.a = 0.5f;
+                HintShadow[1].color = tempColor;
             }
         }
+        yield return new WaitForSeconds(3f);
+
+        foreach (var piece in pices)
+        {
+            if (piece.IsTop())
+            {
+                var pieceSprite = piece.GetComponent<SpriteRenderer>();
+                var HintShadow = piece.GetComponentsInChildren<SpriteRenderer>();
+                var tempColor = HintShadow[1].color;
+                tempColor.a = 0f;
+                HintShadow[1].color = tempColor;
+            }
+        }
+
+
+    }
+    
+
+    private IEnumerator AfterRolledDice()
+    {
+        if (currentPlayer.IsPlayableMoveExist())
+        {
+           StartCoroutine(ShowHintShadow());
+        }
+
 
         nextTurnButton.interactable = false;
 
@@ -569,7 +599,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(ShowNoMovePanel());
         }
         
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
         if (!currentPlayer.IsMoveLeft())
         {
             NextTurn();

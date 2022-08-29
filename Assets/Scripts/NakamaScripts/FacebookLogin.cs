@@ -12,9 +12,10 @@ public class FacebookLogin : MonoBehaviour
     private ISession isession;
     private ISocket isocket;
     [SerializeField] GameObject LoadingPanel;
-    [SerializeField] VideoPlayer diceVideo;
+ 
 
     [SerializeField] NakamaConnection nConnect;
+    [SerializeField] GameObject DiceRotate;
 
 
     public void Awake()
@@ -47,7 +48,7 @@ public class FacebookLogin : MonoBehaviour
     private async void LoginWithFacebook(ILoginResult result)
     {
         LoadingPanel.SetActive(true);
-        diceVideo.Play();
+ 
 
         var aToken = Facebook.Unity.AccessToken.CurrentAccessToken.TokenString;
         isession = await iclient.AuthenticateFacebookAsync(aToken);
@@ -77,7 +78,7 @@ public class FacebookLogin : MonoBehaviour
         if (isocket.IsConnected)
         {
             LoadingPanel.SetActive(false);
-            diceVideo.Stop();
+ 
             ChangeScene();
         }
 
@@ -99,5 +100,11 @@ public class FacebookLogin : MonoBehaviour
     private void ChangeScene()
     {
         SceneManager.LoadScene("Menu");
+    }
+
+    public void Update()
+    {
+        var speed = 3;
+        DiceRotate.transform.Rotate(Vector3.forward * speed);
     }
 }

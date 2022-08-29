@@ -44,7 +44,7 @@ public class PlayerTimer : MonoBehaviour
 
     public async void playerTimer()
     {
-        /*
+        
         if (PassData.JoinedPlayers == 2)
         {
             if (playerLost == false)
@@ -74,13 +74,13 @@ public class PlayerTimer : MonoBehaviour
 
         }
 
-        */
+       
 
     }
 
     public async void OponentTimer()
     {
-        /*
+        
         if (PassData.JoinedPlayers == 2)
         {
             if (playerLost == false)
@@ -103,7 +103,7 @@ public class PlayerTimer : MonoBehaviour
             }
         }
 
-        */
+       
 
     }
 

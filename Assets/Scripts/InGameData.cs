@@ -20,6 +20,9 @@ public class InGameData : MonoBehaviour
     [SerializeField] RawImage MyAvatar;
     [SerializeField] RawImage OponentAvatar;
     [SerializeField] Text RewardAmount;
+    [SerializeField] Text MyUsername;
+    [SerializeField] Text OpponentUsername;
+
     IClient client;
     ISession session;
     
@@ -33,6 +36,9 @@ public class InGameData : MonoBehaviour
         RemoteUsername.text = PassData.otherUsername;
         DoubleUsername.text = PassData.otherUsername;
         AcceptUsername.text = PassData.otherUsername;
+
+        MyUsername.text = PassData.Match.Self.Username;
+        OpponentUsername.text = PassData.otherUsername;
 
         StartCoroutine(GetTexture(PassData.MyURL , MyAvatar));
         StartCoroutine(GetTexture(PassData.OpponentURL, OponentAvatar));

@@ -48,7 +48,7 @@ public class Piece : MonoBehaviour
     //----------------------------
 
     private static bool multipleSelection = false;
-    private static IEnumerable<Piece> multipleSelectionList;
+ 
 
     // for returning from invalid move
     private Vector2 startPos;
@@ -133,7 +133,7 @@ public class Piece : MonoBehaviour
                 {
                     if (this != null)
                     {
-                        transform.position = new Vector2(float.Parse(state["Pos_x"]), -float.Parse(state["pos_y"])-0.15f);
+                        transform.position = new Vector2(float.Parse(state["Pos_x"]), -float.Parse(state["pos_y"]));
 
                       
                     }
@@ -192,19 +192,7 @@ public class Piece : MonoBehaviour
             OnPieceClick();
         }
 
-        if (multipleSelection && Input.GetButtonUp("Fire1"))
-        {
-            foreach (var piece in multipleSelectionList)
-            piece.OnPieceRelease();
-
-            var state = MatchDataJson.SetPeicePos(pieceId, transform);
-            SendMatchState(OpCodes.Peice_Pos, state);
-
-            multipleSelection = false;
-            multipleSelectionList = null;
-
- 
-        }
+         
         else if (isBeingHeld && Input.GetButtonUp("Fire1"))
         {
             OnPieceRelease();
@@ -283,10 +271,10 @@ public class Piece : MonoBehaviour
         // if piece reached the last slot length
 
  
-        if (slot.pieces.Count > 5 && slot.slotType != SlotType.Outside)
+        if (slot.pieces.Count > 4 && slot.slotType != SlotType.Outside)
         {
             posY = 0.3f;
-            posY += (slot.pieces.Count-6) * GetOffsetMultiplier(slot.slotType);
+            posY += (slot.pieces.Count-5) * GetOffsetMultiplier(slot.slotType);
         }
         else
         {
@@ -388,6 +376,13 @@ public class Piece : MonoBehaviour
 
     private void OnPieceClick()
     {
+
+        var HintShadow = this.GetComponentsInChildren<SpriteRenderer>();
+        var tempColor = HintShadow[1].color;
+        tempColor.a = 0f;
+        HintShadow[1].color = tempColor;
+
+
         // if current player does not rolled the dice yet
         if (!IsCurrentPlayerRolled())
         {
@@ -420,15 +415,7 @@ public class Piece : MonoBehaviour
             // TODO: if current dice has value to move above pieces
             //look if above pieces can be moved ?
             // yes => move above pieces at same time
-            else
-            {
-                multipleSelection = true;
-                multipleSelectionList = Slot.GetAbovePieces(this.currentSlot, this).Reverse();
-
-                foreach (var piece in multipleSelectionList)
-                    piece.Hold();
- 
-            }
+  
         }
 
 
@@ -492,9 +479,7 @@ public class Piece : MonoBehaviour
     private void OnPieceRelease()
     {
         BeforeRelease();
-
-        if (multipleSelection)
-            collisionSlot = multipleSelectionList.Last().collisionSlot;
+ 
 
         // if collision not happen
         if (collisionSlot == null)

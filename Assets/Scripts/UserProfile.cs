@@ -56,17 +56,15 @@ public class UserProfile : MonoBehaviour
 
         StartCoroutine(GetTexture());
 
-        // WriteData();
-
-      //  ReadData();
+ 
 
         getUserProfile();
 
  
 
           Wallet();
- 
-  
+
+          rpc();
 
     }
 

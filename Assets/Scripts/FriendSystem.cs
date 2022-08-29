@@ -14,7 +14,7 @@ public class FriendSystem : MonoBehaviour
     [SerializeField] Button SwitchListButton;
     [SerializeField] Sprite FacebookOnSprite;
     [SerializeField] Sprite GameFriendOnSprite;
-    [SerializeField] GameObject NoUserText;
+    [SerializeField] GameObject NoUserPanel;
     [SerializeField] InputField FriendName;
     [SerializeField] GameObject UserFound;
     [SerializeField] Text FoundUserName;
@@ -62,6 +62,10 @@ public class FriendSystem : MonoBehaviour
     public void OnCloseButtonClicked()
     {
         FriendPanel.SetActive(false);
+        NoUserPanel.SetActive(false);
+        UserFound.SetActive(false);
+        FriendName.text = "";
+
     }
 
     public void OnSwitchedButtonClicked()
@@ -92,28 +96,29 @@ public class FriendSystem : MonoBehaviour
 
     public async void ListFriends()
     {
+        if (GameFriendListPanel.active)
+        {
+            foreach (Transform item in FriendListHolderUI)
+            {
+                Destroy(item.gameObject);
+            }
+
+        }
         var result = await iclient.ListFriendsAsync(isession , null , 10);
  
         foreach (var f in result.Friends)
-        { 
-           if(f.State == 0)
+        {
+            if (f.State == 0)
             {
-                if (GameFriendListPanel.active)
-                {
-                    foreach (Transform item in FriendListHolderUI) 
-                    {
-                        Destroy(item.gameObject);
-                    }
 
                        friends = Instantiate(FriendPrefab, FriendListHolderUI);
+
+ 
                        FriendAvatar = friends.GetComponentInChildren<RawImage>();
                        FriendNameText = friends.GetComponentInChildren<Text>();
                        FriendNameText.text = f.User.Username;
                        StartCoroutine(GetTexture(f.User.AvatarUrl ,FriendAvatar ));
-                    
-
-                }
-
+ 
             }
 
             
@@ -133,7 +138,8 @@ public class FriendSystem : MonoBehaviour
 
         if(result.ToString() == "Users: [], ")
         {
-            NoUserText.SetActive(true);
+            NoUserPanel.SetActive(true);
+            UserFound.SetActive(false);
         }
         else
         {
@@ -144,6 +150,7 @@ public class FriendSystem : MonoBehaviour
             Debug.Log(result.Users.Equals(u));
 
                 UserFound.SetActive(true);
+                NoUserPanel.SetActive(false);
                 FoundUserName.text = u.DisplayName;
                 addFriendName = u.DisplayName;
                 StartCoroutine(GetTexture(u.AvatarUrl , FoundUserAvatar));
@@ -192,7 +199,12 @@ public class FriendSystem : MonoBehaviour
         else
         {
             Texture myTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+
+            if(rawImage != null)
+            {
             rawImage.texture = myTexture;
+            }
+
  
             
         }
