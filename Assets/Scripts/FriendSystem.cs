@@ -4,6 +4,7 @@ using UnityEngine;
 using Nakama;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using Nakama.TinyJson;
 
 public class FriendSystem : MonoBehaviour
 {
@@ -210,5 +211,7 @@ public class FriendSystem : MonoBehaviour
         }
 
     }
+
+ 
 
 }

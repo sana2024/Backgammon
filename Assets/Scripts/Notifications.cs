@@ -5,7 +5,7 @@ using UnityEngine;
 using Nakama;
 using UnityEngine.UI;
 using UnityEngine.Networking;
- 
+using Nakama.TinyJson;
 
 public class Notifications : MonoBehaviour
 {
@@ -20,7 +20,9 @@ public class Notifications : MonoBehaviour
     [SerializeField] GameObject notificationPrefab;
     [SerializeField]  Transform notificationParent;
     [SerializeField] FriendSystem friendsSystem;
-
+    [SerializeField] GameObject ChallangePanel;
+ 
+ 
 #if UNITY_IOS
     [SerializeField] mobileNotificationIos IosNotification;
 
@@ -44,16 +46,11 @@ public class Notifications : MonoBehaviour
         isocket.ReceivedNotification += notification => mainThread.Enqueue(() => onRecivedNotification(notification));
 
  
+
+
+
     }
-    public void Update()
-    {
- 
-
-
-      
-    }
-
-
+  
     private void onRecivedNotification(IApiNotification notification)
     {
         Application.runInBackground = true;
@@ -69,6 +66,11 @@ public class Notifications : MonoBehaviour
 
 #endif
  
+                break;
+
+            case 102:
+
+                Debug.Log("sender id " + notification.SenderId + "subject " + notification.Subject);
                 break;
 
         }
@@ -167,6 +169,7 @@ public class Notifications : MonoBehaviour
     {
         NotificationPanel.SetActive(false);
     }
+ 
 
 }
 

@@ -53,6 +53,8 @@ public class Matchmaking : MonoBehaviour
 
         CancleButton.onClick.AddListener(RemoveTicket);
 
+         
+
     }
 
     public async void SendMatchState(long opCode, string state)

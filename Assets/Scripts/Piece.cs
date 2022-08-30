@@ -184,7 +184,7 @@ public class Piece : MonoBehaviour
 
         }
 
-    void Update()
+    void FixedUpdate()
     {
         if (Input.GetButtonDown("Fire1") && IsMouseOverThis() && IsCurrentPlayerTurn() && IsCurrentPlayerRolled() && IsCurrentPlayerPiece() && IsCurrentPlayerMoveLeft())
         {
