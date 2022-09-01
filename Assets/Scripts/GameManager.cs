@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using Nakama;
 using Nakama.TinyJson;
 using System.Threading.Tasks;
+using Nakama.Ninja.WebSockets;
 
 public class GameManager : MonoBehaviour
 {
@@ -42,6 +43,8 @@ public class GameManager : MonoBehaviour
 
     //nakama components
     ISocket isocket;
+    IClient iclient;
+    ISession isession;
 
     //Board
     [SerializeField] GameObject Board;
@@ -76,7 +79,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject RejectGamePanel;
     [SerializeField] GameObject NoMoveExistsPanel;
 
- 
+    [SerializeField] Text TimeoutDEbugger;
+
+    bool InternetConnected;
 
  
 
@@ -88,13 +93,13 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-
+ 
       
         if (instance == null)
             instance = this;
 
-        playerWhite = new Player { id = 0, pieceType = PieceType.White , UserId = PassData.hostPresence.UserId};
-        playerBlack = new Player { id = 1, pieceType = PieceType.Black , UserId = PassData.SecondPresence.UserId };
+        playerWhite = new Player { id = 0, pieceType = PieceType.White , UserId = PassData.hostPresence};
+        playerBlack = new Player { id = 1, pieceType = PieceType.Black , UserId = PassData.SecondPresence};
        
 
  
@@ -125,7 +130,13 @@ public class GameManager : MonoBehaviour
         Debug.Log("my player" + MyPlayer.pieceType);
 
 
+       
+       
+
         isocket = PassData.isocket;
+        iclient = PassData.iClient;
+        isession = PassData.isession;
+
         var mainThread = UnityMainThreadDispatcher.Instance();
         isocket.ReceivedMatchState += m => mainThread.Enqueue(async () => await OnReceivedMatchState(m));
 
@@ -146,12 +157,13 @@ public class GameManager : MonoBehaviour
             MyChecker.sprite = WhiteChecker;
             OponentChecker.sprite = BlackChecker;
 
-        }
+        } 
         else
         {
             MyChecker.sprite = BlackChecker;
             OponentChecker.sprite = WhiteChecker;
         }
+ 
     }
 
     public async void SendMatchState(long opCode, string state)
@@ -162,6 +174,8 @@ public class GameManager : MonoBehaviour
 
     private async Task OnReceivedMatchState(IMatchState matchState)
     {
+
+ 
         var state = matchState.State.Length > 0 ? System.Text.Encoding.UTF8.GetString(matchState.State).FromJson<Dictionary<string, string>>() : null;
 
         switch (matchState.OpCode)
@@ -400,10 +414,11 @@ public class GameManager : MonoBehaviour
     }
 
 
-
-
-    private void Update()
+    private async void Update()
     {
+
+ 
+
         if (DiceController.instance.animationStarted && !DiceController.instance.animationFinished)
         {
             ShowDiceValues();
@@ -741,7 +756,7 @@ public class GameManager : MonoBehaviour
         }
         if (turnPlayer.pieceType == PieceType.Black)
         {
-            playerWhite.UserId = PassData.hostPresence.UserId;
+            playerWhite.UserId = PassData.hostPresence;
             turnPlayer = playerWhite;
             currentPlayer = turnPlayer;
 
@@ -830,4 +845,6 @@ public class GameManager : MonoBehaviour
 
     }
  
+
+
 }

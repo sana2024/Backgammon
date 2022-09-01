@@ -550,14 +550,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c94d0f88f899547f49027775fc87edbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  c: {fileID: 7091280454122891530, guid: ecaa1690077f4427db9e9aee12e73891, type: 3}
-  Friend: {fileID: 702096532457679437, guid: 67316cf5245b6477284e0cad54f21460, type: 3}
-  FriendHolderUI: {fileID: 0}
-  testbtn: {fileID: 1569466271}
-  img: {fileID: 0}
-  controller: 0
-  Circles: []
-  piece: {fileID: 7045629099982548355, guid: 87a100dc6eb364b95b2a317c6c61d91c, type: 3}
 --- !u!4 &741510137
 Transform:
   m_ObjectHideFlags: 0

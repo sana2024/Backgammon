@@ -61,7 +61,7 @@ public class UserProfile : MonoBehaviour
         getUserProfile();
 
  
-
+       
           Wallet();
 
           rpc();
@@ -216,15 +216,33 @@ public class UserProfile : MonoBehaviour
 
     public void Update()
     {
+
         LevelText.text = sendLevel.ToString();
         WinText.text = wins.ToString();
         LossText.text = losses.ToString();
 
-        ReadData();
 
-       // rpc();
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+ 
+            if (Application.internetReachability != NetworkReachability.NotReachable)
+            {
+                Debug.Log("user reconnected");
+            }
 
-       
+        }
+        else
+        {
+ 
+               ReadData();
+
+    
+
+        }
+
+
+
+ 
     }
 
 

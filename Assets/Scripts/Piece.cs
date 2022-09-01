@@ -184,7 +184,7 @@ public class Piece : MonoBehaviour
 
         }
 
-    void FixedUpdate()
+    void Update()
     {
         if (Input.GetButtonDown("Fire1") && IsMouseOverThis() && IsCurrentPlayerTurn() && IsCurrentPlayerRolled() && IsCurrentPlayerPiece() && IsCurrentPlayerMoveLeft())
         {
@@ -200,6 +200,7 @@ public class Piece : MonoBehaviour
             var state = MatchDataJson.SetPeicePos(pieceId, transform);
             SendMatchState(OpCodes.Peice_Pos, state);
 
+ 
 
         }
 

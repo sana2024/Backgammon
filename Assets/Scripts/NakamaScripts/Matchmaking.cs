@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using System.Threading.Tasks;
 using Nakama.TinyJson;
 using UnityEngine.Networking;
+ 
 
 public class Matchmaking : MonoBehaviour
 {
@@ -187,8 +188,8 @@ public class Matchmaking : MonoBehaviour
         hostPresence = matchmakerMatched.Users.OrderBy(x => x.Presence.SessionId).First().Presence;
         SecondPresence = matchmakerMatched.Users.OrderBy(x => x.Presence.SessionId).Last().Presence;
 
-        PassData.hostPresence = hostPresence;
-        PassData.SecondPresence = SecondPresence;
+        PassData.hostPresence = hostPresence.UserId;
+        PassData.SecondPresence = SecondPresence.UserId;
 
         Debug.Log("Our Match ID: " + match.Self.SessionId);
         currentMatch = match;

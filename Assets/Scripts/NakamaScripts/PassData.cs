@@ -21,8 +21,8 @@ public class PassData
     public static string UserIDState;
     public static string OtherUserId;
     public static string otherUsername;
-    public static IUserPresence hostPresence;
-    public static IUserPresence SecondPresence;
+    public static string hostPresence;
+    public static string SecondPresence;
 
 
 

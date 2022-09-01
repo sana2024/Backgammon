@@ -66,18 +66,17 @@ public class NakamaLogin : MonoBehaviour
 
     }
 
-
-
+ 
     public async void OnGuestLogin()
     {
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             ConnectionPanel.SetActive(true);
-        }
+
+
+            }
         else
         {
-
-
 
             ConnectionPanel.SetActive(false);
             string displayName = "";
