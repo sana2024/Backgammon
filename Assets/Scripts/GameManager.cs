@@ -82,8 +82,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text TimeoutDEbugger;
 
     bool InternetConnected;
+    bool ReconnectFlag = false;
 
- 
+
 
     //Others
     int RollCounters = 1;
@@ -417,7 +418,37 @@ public class GameManager : MonoBehaviour
     private async void Update()
     {
 
- 
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            Debug.Log("internet dissconected");
+            ReconnectFlag = true;
+        }
+        else
+        {
+            if (ReconnectFlag == true)
+            {
+                if (!isession.IsExpired)
+                {
+                    Debug.Log("reconnected");
+                    var socket = iclient.NewSocket();
+                    int connectionTimeout = 30;
+                    await socket.ConnectAsync(isession, true, connectionTimeout);
+
+                    if (socket.IsConnected || socket != null)
+                    {
+                        await socket.JoinMatchAsync(PassData.Match.Id);
+                        Debug.Log("re joined the match");
+
+                        Debug.Log("my id" + PassData.Match.Self.UserId);
+                    }
+
+                    ReconnectFlag = false;
+                }
+            }
+
+        }
+
+
 
         if (DiceController.instance.animationStarted && !DiceController.instance.animationFinished)
         {

@@ -9,16 +9,23 @@ using System;
 
 public class Test : MonoBehaviour
 {
+    bool ReconnectFlag = false;
 
     private void Update()
     {
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             Debug.Log("internet dissconected");
+            ReconnectFlag = true;
         }
         else
         {
-            Debug.Log("connected");
+            if(ReconnectFlag == true)
+            {
+                Debug.Log("reconnected");
+                ReconnectFlag = false;
+            }
+           
         }
     }
 

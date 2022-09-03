@@ -17,6 +17,7 @@ public class SpinManager : MonoBehaviour
     public Button SpinButton;
     public Button CollectButton;
     [SerializeField] GameObject CollectBonusPanel;
+    [SerializeField] ParticleSystem CoinParticle;
     [SerializeField] UserProfile userProfile;
 
     int amount;
@@ -124,6 +125,7 @@ public class SpinManager : MonoBehaviour
         CollectButton.gameObject.SetActive(false);
         winText.gameObject.SetActive(false);
         CollectBonusPanel.SetActive(false);
+        CoinParticle.Play();
         userProfile.updateWallet(amount);
     }
 

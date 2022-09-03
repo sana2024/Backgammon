@@ -101,8 +101,6 @@ public class Piece : MonoBehaviour
     {
  
  
-
-        Debug.Log("piece postion" + this.Position);
         isocket = PassData.isocket;
         var mainThread = UnityMainThreadDispatcher.Instance();
         isocket.ReceivedMatchState += m => mainThread.Enqueue(async () => await OnReceivedMatchState(m));
@@ -172,7 +170,7 @@ public class Piece : MonoBehaviour
                 {
                     if (this != null)
                     {
-                        Debug.Log(ActionType);
+ 
                         OnReciveMove(piece ,movesPlayedList.Last().to, movesPlayedList.Last().action, movesPlayedList.Last().step);
                     }
 
@@ -387,20 +385,20 @@ public class Piece : MonoBehaviour
         // if current player does not rolled the dice yet
         if (!IsCurrentPlayerRolled())
         {
-            Debug.Log("Player is not rolled the dice");
+ 
             BeforeRelease();
         }
 
         // if there is piece on bar, it must be placed on first
         else if (!IsBarEmpty() && currentSlot.slotType != SlotType.Bar)
         {
-            Debug.Log("first, peices on bar must be placed");
+ 
             BeforeRelease();
         }
 
         else if (currentSlot.slotType == SlotType.Outside)
         {
-            Debug.Log("no other possible moves");
+ 
             BeforeRelease();
         }
 
@@ -409,7 +407,7 @@ public class Piece : MonoBehaviour
         {
             if (!DiceController.instance.IsDoubleMove())
             {
-                Debug.Log("piece is not top of stack");
+ 
                 BeforeRelease();
             }
 
@@ -634,9 +632,7 @@ public class Piece : MonoBehaviour
 
             enemyPiece.PlaceOn(enemyBar.GetComponent<Slot>());
 
-            Debug.Log(enemyPiece);
-            Debug.Log(enemyBar);
-
+ 
             lastMove.piece.PlaceOn(enemyBar.GetComponent<Slot>());
         }
 

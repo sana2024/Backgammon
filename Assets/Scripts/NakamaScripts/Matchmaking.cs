@@ -117,7 +117,6 @@ public class Matchmaking : MonoBehaviour
  
         if (wallet >= boardPrice)
         {
-        Debug.Log("Finding match");
         SearchingPanel.SetActive(true);
 
         var properites = new Dictionary<string, string>() {
@@ -166,19 +165,6 @@ public class Matchmaking : MonoBehaviour
         var users = matchmakerMatched.Users;
 
   
-       
-        
-        foreach(var u in users)
-        {
-
-            var ids = new[] { u.Presence.UserId};
-            var result = await PassData.iClient.GetUsersAsync(PassData.isession, ids);
-
-            foreach (var user in result.Users)
-            {
-               
-            }
-        }
 
 
         var match = await isocket.JoinMatchAsync(matchmakerMatched);
@@ -232,8 +218,6 @@ public class Matchmaking : MonoBehaviour
         {
 
             CancleButton.onClick.AddListener(RejectGame);
-
-            Debug.Log("Match Found");
  
             var UserId = PlayerPrefs.GetString("MatchSelf");
 
