@@ -83,6 +83,8 @@ public class GameManager : MonoBehaviour
 
     bool InternetConnected;
     bool ReconnectFlag = false;
+    public bool ReconnectSocket = false;
+    
 
 
 
@@ -414,6 +416,36 @@ public class GameManager : MonoBehaviour
         NoMoveExistsPanel.SetActive(false);
     }
 
+    IEnumerator Reconnect()
+    {
+        yield return new WaitForSeconds(3);
+
+        CreateNewSocket();
+    }
+
+    public async void CreateNewSocket()
+    {
+        if (!isession.IsExpired)
+        {
+            Debug.Log("reconnected");
+            isocket = iclient.NewSocket();
+            int connectionTimeout = 30;
+            await isocket.ConnectAsync(isession, true, connectionTimeout);
+            PassData.isocket = isocket;
+
+            if (isocket.IsConnected || isocket != null)
+            {
+                await isocket.JoinMatchAsync(PassData.Match.Id);
+                ReconnectSocket = true;
+                Debug.Log("re joined the match");
+
+                Debug.Log("my id" + PassData.Match.Self.UserId);
+            }
+
+       
+        }
+    }
+
 
     private async void Update()
     {
@@ -427,23 +459,13 @@ public class GameManager : MonoBehaviour
         {
             if (ReconnectFlag == true)
             {
-                if (!isession.IsExpired)
-                {
-                    Debug.Log("reconnected");
-                    var socket = iclient.NewSocket();
-                    int connectionTimeout = 30;
-                    await socket.ConnectAsync(isession, true, connectionTimeout);
+                StartCoroutine(Reconnect());
+                ReconnectFlag = false;
+            }
 
-                    if (socket.IsConnected || socket != null)
-                    {
-                        await socket.JoinMatchAsync(PassData.Match.Id);
-                        Debug.Log("re joined the match");
-
-                        Debug.Log("my id" + PassData.Match.Self.UserId);
-                    }
-
-                    ReconnectFlag = false;
-                }
+            if (!isocket.IsConnected)
+            {
+                ReconnectFlag = true;
             }
 
         }

@@ -26,4 +26,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WhoIsFirstScene.unity
     guid: 5abacaf48254f2d4b99289336a703e7e
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: c279aa232789d4af9b706351d01300ab,
+      type: 2}
+    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000,
+      guid: 38da594fd4fd048d8aa2b298ad775858, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
+      guid: 1e0baaf3c436c4123b6c347aa7d6ecf3, type: 2}

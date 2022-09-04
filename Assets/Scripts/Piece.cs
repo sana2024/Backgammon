@@ -17,6 +17,10 @@ public class Piece : MonoBehaviour
     [SerializeField] Sprite OutsideBlack;
     [SerializeField] Sprite OutsideWhite;
 
+
+    GameObject gameManagerOb;
+    GameManager gameManager;
+
     public List<Piece> Circles = new List<Piece>();
 
     //----------------------------
@@ -72,6 +76,8 @@ public class Piece : MonoBehaviour
 
     float posY = 0;
 
+    UnityMainThreadDispatcher mainThread;
+
 
 
 
@@ -99,10 +105,11 @@ public class Piece : MonoBehaviour
 
     private void Start()
     {
- 
- 
+        gameManagerOb = GameObject.Find("Managers");
+        gameManager = gameManagerOb.GetComponent<GameManager>();
+         
         isocket = PassData.isocket;
-        var mainThread = UnityMainThreadDispatcher.Instance();
+        mainThread = UnityMainThreadDispatcher.Instance();
         isocket.ReceivedMatchState += m => mainThread.Enqueue(async () => await OnReceivedMatchState(m));
 
 
@@ -182,8 +189,23 @@ public class Piece : MonoBehaviour
 
         }
 
+    public void UpdateSocket()
+    {
+        isocket = PassData.isocket;
+        isocket.ReceivedMatchState += m => mainThread.Enqueue(async () => await OnReceivedMatchState(m));
+        Debug.Log("piece recived new piece");
+
+    }
+
     void Update()
     {
+        if (gameManager.ReconnectSocket == true)
+        {
+            UpdateSocket();
+            gameManager.ReconnectSocket = false;
+        }
+
+ 
         if (Input.GetButtonDown("Fire1") && IsMouseOverThis() && IsCurrentPlayerTurn() && IsCurrentPlayerRolled() && IsCurrentPlayerPiece() && IsCurrentPlayerMoveLeft())
         {
  

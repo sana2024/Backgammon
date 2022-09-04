@@ -54,7 +54,13 @@ public class PlayerTimer : MonoBehaviour
                     MyTimer.fillAmount -= 0.0002f;
                     //  radialIndicator1.fillAmount -= 0.0002f;
 
-                    if (MyTimer.fillAmount <= 0.25f)
+
+                    if (MyTimer.fillAmount <= 0.50f)
+                    {
+                        MyTimer.color = Color.white;
+                    }
+
+                        if (MyTimer.fillAmount <= 0.25f)
                     {
                         MyTimer.color = Color.red;
                         // radialIndicator1.color = Color.red;
@@ -90,6 +96,11 @@ public class PlayerTimer : MonoBehaviour
                     OtherPlayerTimer.fillAmount -= 0.0002f;
                     //  radialIndicator1.fillAmount -= 0.0002f;
 
+                    if (OtherPlayerTimer.fillAmount <= 0.50f)
+                    {
+                        OtherPlayerTimer.color = Color.white;
+                    }
+
                     if (OtherPlayerTimer.fillAmount <= 0.25f)
                     {
                         OtherPlayerTimer.color = Color.red;
@@ -120,9 +131,9 @@ public class PlayerTimer : MonoBehaviour
     public void restart()
     {
         MyTimer.fillAmount = 1;
-        MyTimer.color = Color.white;
+        MyTimer.color = Color.green;
         OtherPlayerTimer.fillAmount = 1;
-        OtherPlayerTimer.color = Color.white;
+        OtherPlayerTimer.color = Color.green;
 
 
     }

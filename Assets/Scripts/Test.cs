@@ -22,10 +22,12 @@ public class Test : MonoBehaviour
         {
             if(ReconnectFlag == true)
             {
-                Debug.Log("reconnected");
-                ReconnectFlag = false;
+               
+               Debug.Log("reconnected");
+                return;
+
             }
-           
+ 
         }
     }
 

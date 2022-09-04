@@ -43,6 +43,10 @@ public class DiceController : MonoBehaviour
     ISocket isocket;
 
  
+    UnityMainThreadDispatcher mainThread;
+    [SerializeField] GameManager gameManager;
+
+
 
 
 
@@ -69,7 +73,7 @@ public class DiceController : MonoBehaviour
     private void Start()
     {
         isocket = PassData.isocket;
-        var mainThread = UnityMainThreadDispatcher.Instance();
+        mainThread = UnityMainThreadDispatcher.Instance();
         isocket.ReceivedMatchState += m => mainThread.Enqueue(async () => await OnReceivedMatchState(m));
     }
 
@@ -163,10 +167,23 @@ public class DiceController : MonoBehaviour
         await isocket.SendMatchStateAsync(PassData.Match.Id, opCode, state);
     }
 
+    public void UpdateSocket()
+    {
+        isocket = PassData.isocket;
+        isocket.ReceivedMatchState += m => mainThread.Enqueue(async () => await OnReceivedMatchState(m));
+        Debug.Log("new socket recive created");
+    }
+
  
 
     private void Update()
     {
+           if(gameManager.ReconnectSocket == true)
+        {
+            UpdateSocket();
+            gameManager.ReconnectSocket = false;
+        }
+
         if (!animationStarted || animationFinished)
             return;
 

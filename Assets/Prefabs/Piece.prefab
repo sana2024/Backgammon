@@ -30,6 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 11.4, z: 0}
   m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7071093612871642253}
   m_Father: {fileID: 0}
@@ -46,6 +47,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -120,9 +122,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.22158264, y: 0.39016324}
+  m_Offset: {x: 0.16376574, y: 0.33384877}
   serializedVersion: 2
-  m_Radius: 2.2489796
+  m_Radius: 3.581968
 --- !u!114 &3576438763098073047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,6 +171,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.194, y: 0.371, z: 0}
   m_LocalScale: {x: 5.7910004, y: 5.791, z: 5.791}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8761647000412851048}
   m_RootOrder: 0
@@ -184,6 +187,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
