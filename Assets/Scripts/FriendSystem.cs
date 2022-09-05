@@ -25,7 +25,9 @@ public class FriendSystem : MonoBehaviour
     [SerializeField] Transform FriendListHolderUI;
     [SerializeField] Text FriendNameText;
     [SerializeField] RawImage FriendAvatar;
-    
+    [SerializeField] GameObject FriendChanllegePanel;
+    [SerializeField] PlayerList playerList;
+
 
     bool FacebookOn = false;
     bool GameFriendsOn = true;
@@ -113,12 +115,12 @@ public class FriendSystem : MonoBehaviour
             {
 
                        friends = Instantiate(FriendPrefab, FriendListHolderUI);
-
- 
                        FriendAvatar = friends.GetComponentInChildren<RawImage>();
                        FriendNameText = friends.GetComponentInChildren<Text>();
                        FriendNameText.text = f.User.Username;
                        StartCoroutine(GetTexture(f.User.AvatarUrl ,FriendAvatar ));
+                       Button ChallangeButton = friends.GetComponentInChildren<Button>();
+                       ChallangeButton.onClick.AddListener(() => { playerList.SendNotificationRpc(f.User.Id); });
  
             }
 
@@ -179,12 +181,13 @@ public class FriendSystem : MonoBehaviour
 
 
             }
-        }
- 
-        
+        }  
 
-         
+    }
 
+    public void OnCloseButtonChallengePanel()
+    {
+        FriendChanllegePanel.SetActive(false);
     }
 
     IEnumerator GetTexture(string uri , RawImage rawImage)

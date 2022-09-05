@@ -119,7 +119,7 @@ public class NakamaLogin : MonoBehaviour
                 var user = account.User;
                 displayName = user.DisplayName;
                 username = displayName;
-                avatarUrl = "https://i.pinimg.com/564x/86/50/bf/8650bf253abad3936206478befcf7f50.jpg";
+                avatarUrl = "https://i.pinimg.com/564x/bc/7f/80/bc7f8058b40eaf9118e762830db84e3e.jpg";
                 await iclient.UpdateAccountAsync(isession, username, displayName, avatarUrl, null, null);
 
                 PassData.isocket = isocket;

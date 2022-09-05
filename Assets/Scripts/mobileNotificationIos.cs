@@ -1,14 +1,17 @@
-#if UNITY_IOS
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if UNITY_IOS
 using Unity.Notifications.iOS;
+#endif
 
 using System;
 
 public class mobileNotificationIos : MonoBehaviour
 {
-
+#if UNITY_IOS
     public string notificationId = "tes_Push_Notification";
 
     // Start is called before the first frame update
@@ -88,8 +91,8 @@ public class mobileNotificationIos : MonoBehaviour
     }
 
 
-
+#endif
 }
 
-#endif
+
 

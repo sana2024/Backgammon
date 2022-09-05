@@ -463,10 +463,7 @@ public class GameManager : MonoBehaviour
                 ReconnectFlag = false;
             }
 
-            if (!isocket.IsConnected)
-            {
-                ReconnectFlag = true;
-            }
+ 
 
         }
 
@@ -625,7 +622,7 @@ public class GameManager : MonoBehaviour
 
         foreach (var piece in pices)
         {
-            if (piece.IsTop())
+            if (piece.IsTop() && piece.currentSlot.slotType != SlotType.Outside)
             {
                 var pieceSprite = piece.GetComponent<SpriteRenderer>();
                 var HintShadow = piece.GetComponentsInChildren<SpriteRenderer>();
@@ -638,14 +635,13 @@ public class GameManager : MonoBehaviour
 
         foreach (var piece in pices)
         {
-            if (piece.IsTop())
-            {
+ 
                 var pieceSprite = piece.GetComponent<SpriteRenderer>();
                 var HintShadow = piece.GetComponentsInChildren<SpriteRenderer>();
                 var tempColor = HintShadow[1].color;
                 tempColor.a = 0f;
                 HintShadow[1].color = tempColor;
-            }
+     
         }
 
 
