@@ -57,6 +57,12 @@ public class Notifications : MonoBehaviour
         var mainThread = UnityMainThreadDispatcher.Instance();
 
 
+        var result = await client.ListNotificationsAsync(session, 4 , PlayerPrefs.GetString("nakama.notificationsCacheableCursor"));
+
+        NotificationAmount = result.Notifications.Count();
+        NotificationAmountText.text = NotificationAmount.ToString();
+
+
         isocket.ReceivedNotification += notification => mainThread.Enqueue(() => onRecivedNotification(notification));
  
 
@@ -122,13 +128,24 @@ public class Notifications : MonoBehaviour
         {
             Destroy(item.gameObject);
         }
-        var result = await client.ListNotificationsAsync(session , 4);
 
-        if (NotificationPanel.active)
-        {
+        var cacheableCursor = PlayerPrefs.GetString("nakama.notificationsCacheableCursor", null);
+
+
+        var result = await client.ListNotificationsAsync(session , 4 , cacheableCursor);
+        PlayerPrefs.SetString("nakama.notificationsCacheableCursor", result.CacheableCursor);
+
+ 
+
+
+ 
 
             foreach (var n in result.Notifications)
             {
+                 
+
+            if (NotificationPanel.active)
+               {
                 Debug.Log(n.Subject);
                 GameObject Notification = Instantiate(notificationPrefab, notificationParent);
                 Notification.transform.parent = notificationParent.transform;

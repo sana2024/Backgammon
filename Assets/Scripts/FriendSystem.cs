@@ -27,6 +27,7 @@ public class FriendSystem : MonoBehaviour
     [SerializeField] RawImage FriendAvatar;
     [SerializeField] GameObject FriendChanllegePanel;
     [SerializeField] PlayerList playerList;
+    [SerializeField] Image FoundUserStatus;
 
 
     bool FacebookOn = false;
@@ -121,7 +122,20 @@ public class FriendSystem : MonoBehaviour
                        StartCoroutine(GetTexture(f.User.AvatarUrl ,FriendAvatar ));
                        Button ChallangeButton = friends.GetComponentInChildren<Button>();
                        ChallangeButton.onClick.AddListener(() => { playerList.SendNotificationRpc(f.User.Id); });
- 
+
+
+                     Image[] UserImages = friends.GetComponentsInChildren<Image>();
+                     if (f.User.Online)
+                      {
+                    UserImages[4].color = Color.green;
+                       }
+                    else
+                      {
+                    UserImages[4].color = Color.grey;
+                       }
+
+
+
             }
 
             
@@ -158,9 +172,19 @@ public class FriendSystem : MonoBehaviour
                 addFriendName = u.DisplayName;
                 StartCoroutine(GetTexture(u.AvatarUrl , FoundUserAvatar));
 
-             
-               
-        }
+                Image[] UserImages = friends.GetComponentsInChildren<Image>();
+                if (u.Online)
+                {
+                    FoundUserStatus.color = Color.green;
+                }
+                else
+                {
+                    FoundUserStatus.color = Color.grey;
+                }
+
+
+
+            }
 
             var FriendList = await iclient.ListFriendsAsync(isession);
 
