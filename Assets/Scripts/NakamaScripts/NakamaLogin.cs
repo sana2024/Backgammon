@@ -26,7 +26,7 @@ public class NakamaLogin : MonoBehaviour
 
     [SerializeField] Button PlatformBtn;
     [SerializeField] Sprite GoogleIcon;
-    [SerializeField] Sprite GameCenterIcon;
+    [SerializeField] Sprite AppleIcon;
     [SerializeField] Sprite EditorIcon;
     [SerializeField] GameObject LoadingPanel;
  
@@ -52,8 +52,8 @@ public class NakamaLogin : MonoBehaviour
 
 #if UNITY_IOS
 
-        PlatformBtn.image.sprite = GameCenterIcon;
-        PlatformBtn.onClick.AddListener(OnGameCenterLogin);
+        PlatformBtn.image.sprite = AppleIcon;
+   
 
 #endif
 
@@ -149,29 +149,7 @@ public class NakamaLogin : MonoBehaviour
 
         ChangeScene();
     }
-
-    public async void OnGameCenterLogin()
-    {
-        var bundleId = "...";
-        var playerId = "...";
-        var publicKeyUrl = "...";
-        var salt = "...";
-        var signature = "...";
-        var timestamp = "...";
-        var session = await iclient.AuthenticateGameCenterAsync(bundleId, playerId,
-            publicKeyUrl, salt, signature, timestamp);
-        System.Console.WriteLine("New user: {0}, {1}", session.Created, session);
-
-
-        const string avatarUrl = "https://www.iphonelife.com/sites/iphonelife.com/files/u31936/Game_Center.png";
-        await iclient.UpdateAccountAsync(isession, null, null, avatarUrl, null, null);
-
-        PassData.isocket = isocket;
-        PassData.iClient = iclient;
-        PassData.isession = isession;
-
-        ChangeScene();
-    }
+ 
 
     private void ChangeScene()
     {
