@@ -4,9 +4,10 @@ using UnityEngine;
 using Nakama;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.Video;
-using Nakama.Ninja.WebSockets;
- 
+
+#if UNITY_IOS
+using UnityEngine.SocialPlatforms.GameCenter;
+#endif
 
 public class NakamaLogin : MonoBehaviour
 {
@@ -37,7 +38,7 @@ public class NakamaLogin : MonoBehaviour
     {
 
 
- 
+        iclient = Nconnect.client();
 
 #if UNITY_ANDROID
         
@@ -53,7 +54,8 @@ public class NakamaLogin : MonoBehaviour
 #if UNITY_IOS
 
         PlatformBtn.image.sprite = AppleIcon;
-   
+        PlatformBtn.onClick.AddListener(GamecenterLogin);
+
 
 #endif
 
@@ -87,7 +89,7 @@ public class NakamaLogin : MonoBehaviour
             vars["key"] = "value";
             vars["key2"] = "value2";
 
-            iclient = Nconnect.client();
+ 
             LoadingPanel.SetActive(true);
  
             isession = await iclient.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier, create: true);
@@ -149,7 +151,62 @@ public class NakamaLogin : MonoBehaviour
 
         ChangeScene();
     }
+
+ #if UNITY_IOS
+        public void GamecenterLogin()
+        {
+
+        LoadingPanel.SetActive(true);
+        GameCenterPlatform.ShowDefaultAchievementCompletionBanner(true);
+            Social.localUser.Authenticate(success => {
+                if (success)
+                {
+                    EmailLogin(Social.localUser.userName + "@gmail.com", Social.localUser.id , Social.localUser.userName);
+                }
+
+
+                else
+                    Debug.Log("Failed to authenticate");
+            });
+
+
+
+        }
+
+        public async void EmailLogin(string email, string password , string name)
+        {
+  
+        isession = await iclient.AuthenticateEmailAsync(email, password);
+
+       
+            Debug.Log("session created");
+            isession = await iclient.SessionRefreshAsync(isession);
+
+            var keepAliveIntervalSec = 10;
+            isocket = Socket.From(iclient, new WebSocketAdapter(keepAliveIntervalSec));
+            await isocket.ConnectAsync(isession, true, keepAliveIntervalSec);
+
  
+           var displayName = name;
+           var username = displayName;
+           var avatarUrl = "https://www.nicepng.com/png/detail/232-2323319_gamecenter-icon-game-center-app.png";
+            await iclient.UpdateAccountAsync(isession, username, displayName, avatarUrl, null, null);
+
+            PassData.isocket = isocket;
+            PassData.Username = username;
+            PassData.MyURL = avatarUrl;
+            PassData.iClient = iclient;
+            PassData.isession = isession;
+       
+
+            ChangeScene();
+            LoadingPanel.SetActive(false);
+
+
+    }
+
+#endif
+
 
     private void ChangeScene()
     {
