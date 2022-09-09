@@ -8,22 +8,24 @@ using GooglePlayGames.BasicApi;
 using UnityEngine.UI;
 using UnityEngine.SocialPlatforms;
 
+
 public class GSPManager : MonoBehaviour
 {
 
     private PlayGamesClientConfiguration clientConfigration;
-    public Text status;
-    public Text Description;
+    public string username;
+    public string email;
+    public string password;
+    public bool signedin= false;
+
+    [SerializeField] NakamaLogin nakamaLogin;
  
-
-
 
     // Start is called before the first frame update
     void Start()
     {
         
-        CongigureGPGS();
-        SingintoGPGS(SignInInteractivity.CanPromptOnce,clientConfigration);    }
+   }
 
 internal void CongigureGPGS(){
 
@@ -32,32 +34,44 @@ internal void CongigureGPGS(){
 
 internal void SingintoGPGS(SignInInteractivity Interactivity,PlayGamesClientConfiguration configuration)
 {
+        nakamaLogin.LoadingPanel.SetActive(true);
 
-configuration=clientConfigration;
+        configuration =clientConfigration;
 PlayGamesPlatform.InitializeInstance(configuration);
 PlayGamesPlatform.Activate();
 PlayGamesPlatform.Instance.Authenticate(Interactivity,(code)=>{
-status.text="Athenticating...";
+ 
 if(code==SignInStatus.Success){
 
-    status.text="Successfully Authenticated";
-    Description.text="hello"+Social.localUser.userName +"You have an Id of"+Social.localUser.id;
+   Debug.Log("Successfully Authenticated");
+        signedin = true;
+
+        username = Social.localUser.userName;
+        email = Social.localUser.userName + "@gmail.com";
+        password = Social.localUser.id;
+
+        var avatarUrl = "https://www.xda-developers.com/files/2017/01/Google-Play-Games-Feature-Image-Light-Green.png";
+
+        nakamaLogin.EmailLogin(email, password,username , avatarUrl );
+
+
 }
 
 else{
 
-     status.text="Failed to Authenticate";
-    Description.text="Failed to Authenticate, reason for failure is "+ code;
+    Debug.Log("Failed to Authenticate");
+ 
 }
 });
 
 }
 
 
-public void BasicSigninBtn(){
+public void GoogleSigin(){
 
-    SingintoGPGS(SignInInteractivity.CanPromptAlways,clientConfigration);
-}
+        CongigureGPGS();
+        SingintoGPGS(SignInInteractivity.CanPromptOnce, clientConfigration);
+    }
 
 
 }

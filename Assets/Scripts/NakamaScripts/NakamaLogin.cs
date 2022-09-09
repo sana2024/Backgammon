@@ -29,10 +29,11 @@ public class NakamaLogin : MonoBehaviour
     [SerializeField] Sprite GoogleIcon;
     [SerializeField] Sprite AppleIcon;
     [SerializeField] Sprite EditorIcon;
-    [SerializeField] GameObject LoadingPanel;
+    [SerializeField] public GameObject LoadingPanel;
  
     [SerializeField] GameObject ConnectionPanel;
     [SerializeField] GameObject DiceRotate;
+    [SerializeField] GSPManager gspManager;
 
     private void Start()
     {
@@ -47,7 +48,9 @@ public class NakamaLogin : MonoBehaviour
         Application.targetFrameRate = 60;
 
         PlatformBtn.image.sprite = GoogleIcon;
-        PlatformBtn.onClick.AddListener(OnGoogleLogin);
+        
+        PlatformBtn.onClick.AddListener(()=> { gspManager.GoogleSigin(); });
+
 
 #endif
 
@@ -140,19 +143,21 @@ public class NakamaLogin : MonoBehaviour
 
     public async void OnGoogleLogin()
     {
-        const string playerIdToken = "...";
-        var session = await iclient.AuthenticateGoogleAsync(playerIdToken);
-        System.Console.WriteLine("New user: {0}, {1}", session.Created, session);
- 
+        LoadingPanel.SetActive(true);
+        gspManager.GoogleSigin();
 
-        const string avatarUrl = "https://play-lh.googleusercontent.com/szHQCpMAb0MikYIhvNG1MlruXFUggd6DJHXkMPG1H4lJPB7Lee_BkODfwxpQazxfO9mA";
-        await iclient.UpdateAccountAsync(isession, null, null, avatarUrl, null, null);
- 
+        if (Social.localUser.authenticated)
+        {
+            var avatarUrl = "https://www.xda-developers.com/files/2017/01/Google-Play-Games-Feature-Image-Light-Green.png";
+            EmailLogin(Social.localUser.userName + "@gmail.com", Social.localUser.id, Social.localUser.userName, avatarUrl);
+        }
+
+
 
         ChangeScene();
     }
 
- #if UNITY_IOS
+#if UNITY_IOS
         public void GamecenterLogin()
         {
 
@@ -161,7 +166,8 @@ public class NakamaLogin : MonoBehaviour
             Social.localUser.Authenticate(success => {
                 if (success)
                 {
-                    EmailLogin(Social.localUser.userName + "@gmail.com", Social.localUser.id , Social.localUser.userName);
+                    var avatarUrl = "https://www.nicepng.com/png/detail/232-2323319_gamecenter-icon-game-center-app.png";
+                    EmailLogin(Social.localUser.userName + "@gmail.com", Social.localUser.id , Social.localUser.userName , avatarUrl);
                 }
 
 
@@ -173,7 +179,9 @@ public class NakamaLogin : MonoBehaviour
 
         }
 
-        public async void EmailLogin(string email, string password , string name)
+#endif
+
+    public async void EmailLogin(string email, string password , string name , string avatarUrl)
         {
   
         isession = await iclient.AuthenticateEmailAsync(email, password);
@@ -189,7 +197,6 @@ public class NakamaLogin : MonoBehaviour
  
            var displayName = name;
            var username = displayName;
-           var avatarUrl = "https://www.nicepng.com/png/detail/232-2323319_gamecenter-icon-game-center-app.png";
             await iclient.UpdateAccountAsync(isession, username, displayName, avatarUrl, null, null);
 
             PassData.isocket = isocket;
@@ -205,7 +212,7 @@ public class NakamaLogin : MonoBehaviour
 
     }
 
-#endif
+ 
 
 
     private void ChangeScene()
