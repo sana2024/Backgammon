@@ -141,21 +141,7 @@ public class NakamaLogin : MonoBehaviour
         }
     }
 
-    public async void OnGoogleLogin()
-    {
-        LoadingPanel.SetActive(true);
-        gspManager.GoogleSigin();
-
-        if (Social.localUser.authenticated)
-        {
-            var avatarUrl = "https://www.xda-developers.com/files/2017/01/Google-Play-Games-Feature-Image-Light-Green.png";
-            EmailLogin(Social.localUser.userName + "@gmail.com", Social.localUser.id, Social.localUser.userName, avatarUrl);
-        }
-
-
-
-        ChangeScene();
-    }
+ 
 
 #if UNITY_IOS
         public void GamecenterLogin()

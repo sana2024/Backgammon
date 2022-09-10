@@ -50,7 +50,7 @@ if(code==SignInStatus.Success){
         email = Social.localUser.userName + "@gmail.com";
         password = Social.localUser.id;
 
-        var avatarUrl = "https://www.xda-developers.com/files/2017/01/Google-Play-Games-Feature-Image-Light-Green.png";
+        var avatarUrl = "https://play-lh.googleusercontent.com/szHQCpMAb0MikYIhvNG1MlruXFUggd6DJHXkMPG1H4lJPB7Lee_BkODfwxpQazxfO9mA";
 
         nakamaLogin.EmailLogin(email, password,username , avatarUrl );
 

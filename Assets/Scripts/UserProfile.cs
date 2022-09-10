@@ -204,13 +204,24 @@ public class UserProfile : MonoBehaviour
         var rpcid = "Update_Wallet";
         var WalletRPC = await client.RpcAsync(session, rpcid, payload);
         Wallet();
-        }
-
-       
+        }   
 
     }
 
+    public async void BonusWallet(int coins)
+    {
+        PassData.BoardPrice = coins;
  
+            var payload = JsonWriter.ToJson(new { coins = coins });
+            var rpcid = "Update_Wallet";
+            var WalletRPC = await client.RpcAsync(session, rpcid, payload);
+            Wallet();
+ 
+    }
+
+
+
+
 
 
 
