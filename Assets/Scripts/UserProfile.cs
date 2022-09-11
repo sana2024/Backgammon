@@ -10,7 +10,7 @@ using System;
 
 public class UserProfile : MonoBehaviour
 {
-
+    public static UserProfile instance;
 
     IClient client;
     ISession session;
@@ -46,6 +46,8 @@ public class UserProfile : MonoBehaviour
     [SerializeField] Text MatchUserName;
  
     PersonData data;
+
+
  
 
     // Start is called before the first frame update

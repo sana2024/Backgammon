@@ -126,7 +126,7 @@ public class SpinManager : MonoBehaviour
         winText.gameObject.SetActive(false);
         CollectBonusPanel.SetActive(false);
         CoinParticle.Play();
-        userProfile.updateWallet(amount);
+        userProfile.BonusWallet(amount);
     }
 
  

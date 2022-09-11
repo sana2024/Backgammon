@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
- 
+#if UNITY_ANDROID
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+#endif
 using UnityEngine.UI;
 using UnityEngine.SocialPlatforms;
 
 
 public class GSPManager : MonoBehaviour
 {
+    #if UNITY_ANDROID
 
     private PlayGamesClientConfiguration clientConfigration;
     public string username;
@@ -72,7 +74,7 @@ public void GoogleSigin(){
         CongigureGPGS();
         SingintoGPGS(SignInInteractivity.CanPromptOnce, clientConfigration);
     }
-
+#endif
 
 }
 
