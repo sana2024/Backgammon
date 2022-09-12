@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class IAPManager : MonoBehaviour, IStoreListener
 {
@@ -19,7 +20,11 @@ public class IAPManager : MonoBehaviour, IStoreListener
     private string coin1750000 = "1000_coins";
 
     [SerializeField] UserProfile userProfile;
+    [SerializeField] InGameData inGameData;
  
+
+ 
+
 
 
     public void InitializePurchasing()
@@ -45,6 +50,7 @@ public class IAPManager : MonoBehaviour, IStoreListener
     public void Buycoin16500()
     {
         BuyProductID(coin16500);
+
             UserProfile.instance.BonusWallet(16500);  
     }
     public void Buycoin30000()
@@ -76,26 +82,26 @@ public class IAPManager : MonoBehaviour, IStoreListener
         {
  
             Debug.Log("Give Player coin16500 ");
-            userProfile.BonusWallet(16500);
+            UpdateWallet(16500);
 
         }
         else if (String.Equals(args.purchasedProduct.definition.id, coin30000, StringComparison.Ordinal))
         {
  
             Debug.Log("Give Player coin30000 ");
-            userProfile.BonusWallet(30000);
+            UpdateWallet(30000);
         }
         else if (String.Equals(args.purchasedProduct.definition.id, coin625000, StringComparison.Ordinal))
         {
  
             Debug.Log("Give Player coin625000 ");
-            userProfile.BonusWallet(625000);
+            UpdateWallet(625000);
         }
         else if (String.Equals(args.purchasedProduct.definition.id, coin1750000, StringComparison.Ordinal))
         {
  
             Debug.Log("Give Player coin1750000 ");
-            userProfile.BonusWallet(1750000);
+            UpdateWallet(1750000);
         }
         else
         {
@@ -122,7 +128,30 @@ public class IAPManager : MonoBehaviour, IStoreListener
     void Start()
     {
         if (m_StoreController == null) { InitializePurchasing(); }
+
+ 
+
+         
+       
     }
+
+    public void UpdateWallet(int amount)
+    {
+
+        Scene currentScene = SceneManager.GetActiveScene();
+        string sceneName = currentScene.name;
+
+        if(sceneName == "Menu")
+        {
+            userProfile.BonusWallet(amount);
+        }
+        if(sceneName == "GameScene")
+        {
+            inGameData.BonusWallet(amount);
+        }
+    }
+
+ 
 
     private void TestSingleton()
     {

@@ -12,11 +12,8 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/GoogleSigninAndSave/Scenes/GoogleAuthenticationScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 0
-    path: Assets/Scenes/Test.unity
-    guid: eec4adbc19e564a9da737261eb28c407
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
@@ -32,6 +29,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/WhoIsFirstScene.unity
     guid: 5abacaf48254f2d4b99289336a703e7e
+  - enabled: 0
+    path: Assets/Scenes/Test.unity
+    guid: eec4adbc19e564a9da737261eb28c407
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: c279aa232789d4af9b706351d01300ab,
       type: 2}
