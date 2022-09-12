@@ -463,26 +463,13 @@ public class GameManager : MonoBehaviour
                 ReconnectFlag = false;
             }
 
- 
 
         }
-
 
 
         if (DiceController.instance.animationStarted && !DiceController.instance.animationFinished)
         {
             ShowDiceValues();
-        }
-
-        if(turnPlayer.UserId == PassData.Match.Self.UserId)
-        {
-            playerTimer.OtherPlayerTimer.fillAmount = 1;
-            playerTimer.playerTimer();
-  
-        }
-        else
-        {
-            playerTimer.OponentTimer();
         }
 
         if (turnPlayer.IsMoveLeft() || turnPlayer.rolledDice == false)
@@ -493,9 +480,22 @@ public class GameManager : MonoBehaviour
         {
             nextTurnButton.interactable = true;
         }
-
-        
+    
  
+    }
+
+    private void FixedUpdate()
+    {
+        if (turnPlayer.UserId == PassData.Match.Self.UserId)
+        {
+            playerTimer.OtherPlayerTimer.fillAmount = 1;
+            playerTimer.playerTimer();
+
+        }
+        else
+        {
+            playerTimer.OponentTimer();
+        }
     }
 
     #endregion

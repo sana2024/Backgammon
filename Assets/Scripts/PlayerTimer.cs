@@ -34,13 +34,7 @@ public class PlayerTimer : MonoBehaviour
 
     bool playerLost = false;
 
-    private void Update()
-    {
-
  
-   
-
-    }
 
     public async void playerTimer()
     {

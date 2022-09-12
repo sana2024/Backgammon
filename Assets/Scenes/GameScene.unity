@@ -2464,6 +2464,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -29
       objectReference: {fileID: 0}
+    - target: {fileID: 5519569215832239434, guid: cfbb8a82aa480401c9d1aca70e308a71,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5519569215832239434, guid: cfbb8a82aa480401c9d1aca70e308a71,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1142493420}
+    - target: {fileID: 5519569215832239434, guid: cfbb8a82aa480401c9d1aca70e308a71,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseIAPpanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 5519569215832239434, guid: cfbb8a82aa480401c9d1aca70e308a71,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: InAppPurchase, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 5519569215832239477, guid: cfbb8a82aa480401c9d1aca70e308a71,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -2776,6 +2796,12 @@ PrefabInstance:
 --- !u!224 &337098911 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5519569215838852216, guid: cfbb8a82aa480401c9d1aca70e308a71,
+    type: 3}
+  m_PrefabInstance: {fileID: 337098910}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &337098912 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5519569215838852219, guid: cfbb8a82aa480401c9d1aca70e308a71,
     type: 3}
   m_PrefabInstance: {fileID: 337098910}
   m_PrefabAsset: {fileID: 0}
@@ -9299,7 +9325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33a736cf7507f4643b70e15c3d6cba54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IAPpanel: {fileID: 0}
+  IAPpanel: {fileID: 337098912}
 --- !u!4 &1142493421
 Transform:
   m_ObjectHideFlags: 0

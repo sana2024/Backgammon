@@ -102,7 +102,7 @@ public class FacebookLogin : MonoBehaviour
         SceneManager.LoadScene("Menu");
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
         var speed = 3;
         DiceRotate.transform.Rotate(Vector3.forward * speed);

@@ -225,6 +225,12 @@ public class NakamaLogin : MonoBehaviour
 
     }
 
+    private void FixedUpdate()
+    {
+        var speed = 3;
+        DiceRotate.transform.Rotate(Vector3.forward * speed);
+    }
+
 
 
 
