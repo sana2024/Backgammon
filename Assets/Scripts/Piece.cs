@@ -614,22 +614,7 @@ public class Piece : MonoBehaviour
 
             PlaceOn(slotOutside);
 
-          /*  
-           foreach( var piece in slotOutside.pieces)
-            {
-                  if (slotOutside.pieces.LastOrDefault() != null)
-                 {
- 
-                    this.transform.position = new Vector2(this.transform.position.x,this.transform.position.y + index);
-                    DecreaseColliderRadius();
-
-
-            }
-
-           
-            }
- */
-            
+         
 
             // check round finish
             GameManager.instance.CheckRoundFinish();

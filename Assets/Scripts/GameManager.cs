@@ -151,6 +151,7 @@ public class GameManager : MonoBehaviour
 
         if (currentPlayer.UserId == PassData.Match.Self.UserId)
         {
+
             buttonController.EnableRollButton();
 
         }
@@ -191,6 +192,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case 6:
+
 
                  buttonController.EnableRollButton();
 
